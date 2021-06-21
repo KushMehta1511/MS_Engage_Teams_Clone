@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "901159309162",
+    "project_id": "ms-teams-clone-engage-6c02a",
+    "storage_bucket": "ms-teams-clone-engage-6c02a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901159309162:android:9500bef9f67f637b9c5f13",
+        "android_client_info": {
+          "package_name": "com.example.ms_teams_clone_engage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901159309162-a1m1255h2npfhdjrlu3pa3rtlqnmhgal.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ms_teams_clone_engage",
+            "certificate_hash": "32255d766cbe0287bab75caa46563b185f1aee6a"
+          }
+        },
+        {
+          "client_id": "901159309162-5leetl7m6edoilp838gphnu2i14p93jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv1Mrag2n5MVNQDuk-RnnhnnlUhQSVaqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901159309162-5leetl7m6edoilp838gphnu2i14p93jf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
