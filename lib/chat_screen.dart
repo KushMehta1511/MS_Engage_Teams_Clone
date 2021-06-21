@@ -17,7 +17,7 @@ late User loggedInUser;
 enum optionsMenu { email, call, message, signout }
 
 class ChatScreen extends StatefulWidget {
-  static const String id = 'chat_screen';
+  static const String id = 'chat_screen_demo';
   final String roomDetails;
 
   const ChatScreen({Key? key, required this.roomDetails}) : super(key: key);
