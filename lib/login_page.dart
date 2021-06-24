@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/logged_user.dart';
+import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/resources/firebase_repo.dart';
 import 'package:ms_teams_clone_engage/signup_page.dart';
 
@@ -408,13 +409,13 @@ class _LoginPageState extends State<LoginPage> {
                                   //       fontSize: 16.0);
                                   // }
                                   currentUser = (await _auth.currentUser)!;
-                                  chatOptionDialog();
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => ChatScreen(),
-                                  //   ),
-                                  // );
+                                  // chatOptionDialog();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePage(),
+                                    ),
+                                  );
                                 }
                                 // else {
                                 //   Fluttertoast.showToast(

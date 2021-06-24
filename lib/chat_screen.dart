@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ms_teams_clone_engage/constants.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/video_call.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,7 +18,7 @@ late User loggedInUser;
 enum optionsMenu { email, call, message, signout }
 
 class ChatScreen extends StatefulWidget {
-  static const String id = 'chat_screen_demo1';
+  static const String id = 'chat_screen_demo';
   final String roomDetails;
 
   const ChatScreen({Key? key, required this.roomDetails}) : super(key: key);
@@ -87,6 +88,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   getPhotoUrl() {
     if (isFileNull) {
+      if (photoUrl == "") {
+        return AssetImage('assets/images/profile.png');
+      } else {
+        return NetworkImage(photoUrl);
+      }
+    } else {
       if (photoUrl == "") {
         return AssetImage('assets/images/profile.png');
       } else {
@@ -454,72 +461,107 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              // child: CircleAvatar(
-              //   backgroundColor: Colors.grey,
-              //   radius: 50.0,
-              //   backgroundImage: getPhotoUrl(),
-              // ),
-              child: Stack(
-                children: <Widget>[
-                  CircleAvatar(
+      // drawer: Drawer(
+      //   child: ListView(
+      //     // Important: Remove any padding from the ListView.
+      //     padding: EdgeInsets.zero,
+      //     children: <Widget>[
+      //       DrawerHeader(
+      //         decoration: BoxDecoration(
+      //           color: Colors.blue,
+      //         ),
+      //         // child: CircleAvatar(
+      //         //   backgroundColor: Colors.grey,
+      //         //   radius: 50.0,
+      //         //   backgroundImage: getPhotoUrl(),
+      //         // ),
+      //         child: Stack(
+      //           children: <Widget>[
+      //             ElevatedButton(
+      //               style: ElevatedButton.styleFrom(
+      //                 primary: Colors.transparent,
+      //                 shadowColor: Colors.transparent,
+      //               ),
+      //               onPressed: () {
+      //                 Navigator.push(
+      //                     context,
+      //                     MaterialPageRoute(
+      //                         builder: (context) => ProfilePage()));
+      //               },
+      //               child: CircleAvatar(
+      //                 backgroundColor: Colors.grey,
+      //                 radius: 50.0,
+      //                 backgroundImage: getPhotoUrl(),
+      //               ),
+      //             ),
+      //             // Positioned(
+      //             //   top: 65.0,
+      //             //   left: 30.0 + 5.0,
+      //             //   right: -(35.0 + 10.0),
+      //             //   bottom: -20.0,
+      //             //   child: Container(
+      //             //     decoration: BoxDecoration(
+      //             //         shape: BoxShape.circle, color: Color(0xFFFAFAFA)),
+      //             //     child: IconButton(
+      //             //       icon: Icon(
+      //             //         Icons.photo_camera,
+      //             //         color: Colors.black,
+      //             //         size: 25.0,
+      //             //       ),
+      //             //       onPressed: handleChooseFromGallery,
+      //             //     ),
+      //             //   ),
+      //             // ),
+      //           ],
+      //         ),
+      //       ),
+      //       ListTile(
+      //         title: Text(userDisplayName),
+      //         onTap: () {
+      //           // Update the state of the app
+      //           // ...
+      //           // Then close the drawer
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //       ListTile(
+      //         title: Text('Item 2'),
+      //         onTap: () {
+      //           // Update the state of the app
+      //           // ...
+      //           // Then close the drawer
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      appBar: AppBar(
+        leading: CloseButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          },
+        ),
+        automaticallyImplyLeading: true,
+        title: Row(
+          children: [
+            Text(widget.roomDetails),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: CircleAvatar(
                     backgroundColor: Colors.grey,
-                    radius: 50.0,
                     backgroundImage: getPhotoUrl(),
                   ),
-                  // Positioned(
-                  //   top: 65.0,
-                  //   left: 30.0 + 5.0,
-                  //   right: -(35.0 + 10.0),
-                  //   bottom: -20.0,
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //         shape: BoxShape.circle, color: Color(0xFFFAFAFA)),
-                  //     child: IconButton(
-                  //       icon: Icon(
-                  //         Icons.photo_camera,
-                  //         color: Colors.black,
-                  //         size: 25.0,
-                  //       ),
-                  //       onPressed: handleChooseFromGallery,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: Text(userDisplayName),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
+                ),
+              ],
             ),
           ],
         ),
-      ),
-      appBar: AppBar(
-        //leading: null,
-        //automaticallyImplyLeading: false,
         actions: <Widget>[
           // ChangeThemeButtonWidget(),
           IconButton(
@@ -591,7 +633,6 @@ class _ChatScreenState extends State<ChatScreen> {
           //           MaterialPageRoute(builder: (context) => LoginPage()));
           //     }),
         ],
-        title: Text(widget.roomDetails),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
