@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
+import 'package:ms_teams_clone_engage/login_page.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String roomDetails;
@@ -19,17 +20,21 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   final _auth = FirebaseAuth.instance;
   final serverText = TextEditingController();
   final roomText = TextEditingController();
-  late final roomTextValue = "Default_Meeting";
+  late final roomTextValue = "";
   final subjectText = TextEditingController();
-  late var subjectTextValue = "Video_Meeting";
-  final nameText = TextEditingController();
-  late var nameTextValue = "Your_Name";
-  final emailText = TextEditingController(text: loggedInUser.email);
+  late var subjectTextValue = "";
+  final nameText = TextEditingController(text: currentUser.displayName);
+  late var nameTextValue = "";
+  late final emailText = TextEditingController(text: loggedInUser.email);
   final iosAppBarRGBAColor =
       TextEditingController(text: "#0080FF80"); //transparent blue
   bool? isAudioOnly = true;
   bool? isAudioMuted = true;
   bool? isVideoMuted = true;
+  final _emailFormKey = GlobalKey<FormState>();
+  final _nameFormKey = GlobalKey<FormState>();
+  final _subjectFormKey = GlobalKey<FormState>();
+  final _roomFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -53,6 +58,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: true,
           title: Text(widget.roomDetails),
           leading: IconButton(
@@ -64,6 +70,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             IconButton(
                 onPressed: () {
                   _auth.signOut();
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 icon: Icon(Icons.logout))
           ],
@@ -123,60 +131,90 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           // SizedBox(
           //   height: 14.0,
           // ),
-          TextFormField(
-            //controller: roomText,
-            initialValue: widget.roomDetails,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Room",
+          Form(
+            key: _roomFormKey,
+            child: TextFormField(
+              //controller: roomText,
+              initialValue: widget.roomDetails,
+              enabled: false,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Room",
+              ),
+              validator: (value) {
+                return (value != null) ? null : "Please Enter a Room Name";
+              },
             ),
           ),
           SizedBox(
             height: 14.0,
           ),
-          TextFormField(
-            controller: subjectText,
-            onChanged: (value) {
-              setState(() {
-                subjectTextValue = value;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: "Enter a subject for the meeting",
-              border: OutlineInputBorder(),
-              labelText: "Subject",
+          Form(
+            key: _subjectFormKey,
+            child: TextFormField(
+              controller: subjectText,
+              onChanged: (value) {
+                setState(() {
+                  subjectTextValue = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: "Enter a subject for the meeting",
+                border: OutlineInputBorder(),
+                labelText: "Subject",
+              ),
+              validator: (value) {
+                return (value != null) ? null : "Please Enter a Subject Name";
+              },
             ),
-            validator: (value) {
-              return (value != null) ? null : "Please Enter a Subject Name";
-            },
           ),
           SizedBox(
             height: 14.0,
           ),
-          TextFormField(
-            controller: nameText,
-            onChanged: (value) {
-              setState(() {
-                nameTextValue = value;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: "Enter display name to be used in the video call",
-              border: OutlineInputBorder(),
-              labelText: "Display Name",
+          Form(
+            key: _nameFormKey,
+            child: TextFormField(
+              controller: nameText,
+              onChanged: (value) {
+                setState(() {
+                  nameTextValue = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: "Enter display name to be used in the video call",
+                border: OutlineInputBorder(),
+                labelText: "Display Name",
+              ),
+              validator: (value) {
+                return (value != null) ? null : "Please Enter a valid Name";
+              },
             ),
-            validator: (value) {
-              return (value != null) ? null : "Please Enter a valid Name";
-            },
           ),
           SizedBox(
             height: 14.0,
           ),
-          TextFormField(
-            controller: emailText,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Email",
+          Form(
+            key: _emailFormKey,
+            child: TextFormField(
+              controller: emailText,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Email",
+              ),
+              enabled: false,
+              validator: (value) {
+                bool emailValid = false;
+                if (value != null) {
+                  emailValid = RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                      .hasMatch(value);
+                }
+                if (!emailValid) {
+                  return 'Enter a valid Email Address';
+                } else {
+                  return null;
+                }
+              },
             ),
           ),
           SizedBox(
@@ -222,15 +260,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             width: double.maxFinite,
             child: ElevatedButton(
               onPressed: () {
-                _joinMeeting();
+                if (_emailFormKey.currentState!.validate() &&
+                    _subjectFormKey.currentState!.validate() &&
+                    _roomFormKey.currentState!.validate() &&
+                    _nameFormKey.currentState!.validate()) {
+                  _joinMeeting();
+                }
               },
               child: Text(
                 "Join Meeting",
                 style: TextStyle(color: Colors.white),
               ),
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateColor.resolveWith((states) => Colors.blue)),
+                  backgroundColor: MaterialStateColor.resolveWith(
+                      (states) => Colors.lightBlueAccent)),
             ),
           ),
           SizedBox(

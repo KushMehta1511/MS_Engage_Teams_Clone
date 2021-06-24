@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/logged_user.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/welcome_page.dart';
 
 final _roomFirestore = FirebaseFirestore.instance.collection('room');
@@ -377,10 +378,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                     await _auth.createUserWithEmailAndPassword(
                                         email: email.trim(),
                                         password: password);
+                                currentUser = (await _auth.currentUser)!;
                                 DocumentSnapshot doc;
                                 if (newUser != null) {
-                                  await usersRef.add({
-                                    "id": newUser.hashCode,
+                                  await usersRef.doc(currentUser.uid).set({
+                                    "id": currentUser.uid,
                                     //"username": username,
                                     "photoUrl": '',
                                     "email": email,
@@ -390,15 +392,14 @@ class _CreateAccountState extends State<CreateAccount> {
                                   // doc = usersRef
                                   //     .doc(newUser.hashCode.toString())
                                   //     .get() as DocumentSnapshot<Object?>;
-                                  currentUser = (await _auth.currentUser)!;
-                                  chatOptionDialog();
-                                  // Navigator.pushReplacement(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //         ChatScreen(roomDetails: roomDetails),
-                                  //   ),
-                                  // );
+
+                                  //chatOptionDialog();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePage(),
+                                    ),
+                                  );
                                 }
                               } catch (e) {
                                 Fluttertoast.showToast(
