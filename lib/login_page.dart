@@ -222,15 +222,16 @@ class _LoginPageState extends State<LoginPage> {
         resizeToAvoidBottomInset: true,
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
-              ],
-            ),
-          ),
+              // gradient: LinearGradient(
+              //   begin: Alignment.topRight,
+              //   end: Alignment.bottomLeft,
+              //   colors: [
+              //     Theme.of(context).primaryColor,
+              //     Theme.of(context).accentColor,
+              //   ],
+              // ),
+
+              ),
           child: Center(
             child: ListView(
               shrinkWrap: true,
@@ -258,19 +259,19 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       onSaved: (String? value) => username = value!,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email, color: Color(0xFF003D66)),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF534DD6)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                             8.0,
                           ),
                           borderSide: BorderSide(
-                            color: Color(0xFF003D66),
+                            color: Color(0xFF534DD6),
                           ),
                         ),
                         labelText: 'Email',
                         labelStyle: TextStyle(
                           fontSize: 15.0,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         hintText: 'Enter Email address',
                       ),
@@ -288,9 +289,9 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         }
                       },
-                      style: TextStyle(
-                        color: Color(0xFF003D66),
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF003D66),
+                      // ),
                     ),
                   ),
                 ),
@@ -307,20 +308,20 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.vpn_key,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                             8.0,
                           ),
                           borderSide: BorderSide(
-                            color: Color(0xFF003D66),
+                            color: Color(0xFF534DD6),
                           ),
                         ),
                         labelText: 'Password',
                         labelStyle: TextStyle(
                           fontSize: 15.0,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         hintText: 'Enter Password',
                       ),
@@ -333,9 +334,9 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         }
                       },
-                      style: TextStyle(
-                        color: Color(0xFF003D66),
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF003D66),
+                      // ),
                       obscureText: true,
                     ),
                   ),
@@ -354,10 +355,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context)
-                                      .accentColor
-                                      .withOpacity(0.7))),
+                            // backgroundColor: MaterialStateProperty.all<Color>(
+                            //   Theme.of(context).accentColor.withOpacity(0.7),
+                            // ),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Color(
+                              0xFF534DD6,
+                            ).withOpacity(0.7)),
+                          ),
                           onPressed: () async {
                             if (_emailFormKey.currentState!.validate() &&
                                 _passwordFormKey.currentState!.validate()) {
@@ -450,7 +455,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Log In',
                             style: TextStyle(
-                              color: Color(0xFF003D66),
+                              color: Colors.white,
                               fontSize: 20.0,
                             ),
                           ),
@@ -486,7 +491,7 @@ class _LoginPageState extends State<LoginPage> {
                             '/',
                             style: TextStyle(
                               fontSize: 15.0,
-                              color: Color(0xFF003D66),
+                              color: Color(0xFF534DD6),
                             ),
                           ),
                         ),
@@ -505,7 +510,7 @@ class _LoginPageState extends State<LoginPage> {
                           'Sign Up',
                           style: TextStyle(
                               fontSize: 15.0,
-                              color: Color(0xFF003D66),
+                              color: Color(0xFF534DD6),
                               decoration: TextDecoration.underline),
                         ),
                       )

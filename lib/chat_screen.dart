@@ -86,16 +86,64 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  getBackgroundText() {
+    if (isFileNull) {
+      if (photoUrl == "") {
+        // return AssetImage('assets/images/profile.png');
+        // return Text(
+        //   splitDisplayName(),
+        //   style: TextStyle(color: Theme.of(context).accentColor),
+        // );
+        // return AssetImage('assets/images/profile.png');
+        return Text(
+          splitDisplayName(),
+          style: TextStyle(color: Theme.of(context).accentColor),
+        );
+      } else {
+        return null;
+      }
+    } else {
+      if (photoUrl == "") {
+        // return AssetImage('assets/images/profile.png');
+        // return AssetImage('assets/images/profile.png');
+        return Text(
+          splitDisplayName(),
+          style: TextStyle(color: Theme.of(context).accentColor),
+        );
+      } else {
+        return null;
+      }
+    }
+  }
+
+  String splitDisplayName() {
+    List<String> userNameSplit = userDisplayName.split(' ');
+    if (userNameSplit.length > 1) {
+      return userNameSplit[0][0].toUpperCase() +
+          " " +
+          userNameSplit[userNameSplit.length - 1][0].toUpperCase();
+    } else {
+      return userNameSplit[0][0].toUpperCase();
+    }
+  }
+
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
-        return AssetImage('assets/images/profile.png');
+        // return AssetImage('assets/images/profile.png');
+        // return Text(
+        //   splitDisplayName(),
+        //   style: TextStyle(color: Theme.of(context).accentColor),
+        // );
+        return null;
       } else {
         return NetworkImage(photoUrl);
       }
     } else {
       if (photoUrl == "") {
-        return AssetImage('assets/images/profile.png');
+        // return AssetImage('assets/images/profile.png');
+        // return Text(splitDisplayName());
+        return null;
       } else {
         return NetworkImage(photoUrl);
       }
@@ -552,12 +600,12 @@ class _ChatScreenState extends State<ChatScreen> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage: getPhotoUrl(),
-                  ),
-                ),
+                // Center(
+                //   child: CircleAvatar(
+                //     backgroundColor: Colors.grey,
+                //     backgroundImage: getPhotoUrl(),
+                //   ),
+                // ),
               ],
             ),
           ],
@@ -633,7 +681,7 @@ class _ChatScreenState extends State<ChatScreen> {
           //           MaterialPageRoute(builder: (context) => LoginPage()));
           //     }),
         ],
-        backgroundColor: Colors.lightBlueAccent,
+        // backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
         child: Column(
@@ -645,7 +693,12 @@ class _ChatScreenState extends State<ChatScreen> {
               userDisplayName: userDisplayName,
             ),
             Container(
-              decoration: kMessageContainerDecoration,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                      color: Theme.of(context).accentColor, width: 2.0),
+                ),
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -655,7 +708,19 @@ class _ChatScreenState extends State<ChatScreen> {
                       onChanged: (value) {
                         messageText = value;
                       },
-                      decoration: kMessageTextFieldDecoration,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          hintText: 'Type your message here...',
+                          border: InputBorder.none,
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              child: getBackgroundText(),
+                              backgroundImage: getPhotoUrl(),
+                            ),
+                          )),
                     ),
                   ),
                   TextButton(
@@ -694,9 +759,11 @@ class MessagesStream extends StatelessWidget {
   final String roomDetails;
   final String userDisplayName;
 
-  const MessagesStream(
-      {Key? key, required this.roomDetails, required this.userDisplayName})
-      : super(key: key);
+  const MessagesStream({
+    Key? key,
+    required this.roomDetails,
+    required this.userDisplayName,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -709,7 +776,7 @@ class MessagesStream extends StatelessWidget {
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
+              backgroundColor: Theme.of(context).accentColor,
             ),
           );
         }
@@ -744,11 +811,23 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({required this.sender, required this.text, required this.isMe});
+  MessageBubble({
+    required this.sender,
+    required this.text,
+    required this.isMe,
+  });
 
   final String sender;
   final String text;
   final bool isMe;
+
+  // getPhotoUrl() {
+  //   if (photoUrl == "") {
+  //     return AssetImage('assets/images/profile.png');
+  //   } else {
+  //     return NetworkImage(photoUrl);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -762,7 +841,7 @@ class MessageBubble extends StatelessWidget {
             sender,
             style: TextStyle(
               fontSize: 12.0,
-              color: Colors.black54,
+              // color: Colors.black54,
             ),
           ),
           Material(
@@ -777,18 +856,18 @@ class MessageBubble extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            color: isMe ? Theme.of(context).accentColor : Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isMe ? Colors.white : Colors.black54,
+                  color: isMe ? Colors.black54 : Colors.black54,
                   fontSize: 15.0,
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );

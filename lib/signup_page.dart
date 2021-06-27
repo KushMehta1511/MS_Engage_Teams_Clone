@@ -172,7 +172,7 @@ class _CreateAccountState extends State<CreateAccount> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Theme.of(context).accentColor.withOpacity(0.8),
+          backgroundColor: Colors.white10,
           title: Center(
             child: Hero(
               tag: 'logo',
@@ -192,15 +192,15 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor,
-              ],
-            ),
-          ),
+              // gradient: LinearGradient(
+              //   begin: Alignment.topRight,
+              //   end: Alignment.bottomLeft,
+              //   colors: [
+              //     Theme.of(context).accentColor,
+              //     Theme.of(context).primaryColor,
+              //   ],
+              // ),
+              ),
           child: Center(
             child: ListView(
               shrinkWrap: true,
@@ -212,10 +212,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   child: GestureDetector(
                     child: CircleAvatar(
                       radius: 50.0,
-                      backgroundColor: Colors.grey,
+                      backgroundColor: Colors.white30,
                       child: Icon(
                         Icons.account_circle,
-                        color: Color(0xFF003D66),
+                        color: Color(0xFF534DD6),
                         size: 100.0,
                       ),
                     ),
@@ -230,27 +230,27 @@ class _CreateAccountState extends State<CreateAccount> {
                     child: TextFormField(
                       onSaved: (newValue) => email = newValue!,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email, color: Color(0xFF003D66)),
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF534DD6)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                             8.0,
                           ),
                           borderSide: BorderSide(
-                            color: Color(0xFF003D66),
+                            color: Color(0xFF534DD6),
                           ),
                         ),
                         labelText: 'Email',
                         labelStyle: TextStyle(
                           fontSize: 15.0,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         hintText: 'Enter Email address',
                       ),
 //                      autovalidate: true,
                       validator: validateEmailAddress,
-                      style: TextStyle(
-                        color: Color(0xFF003D66),
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF003D66),
+                      // ),
                     ),
                   ),
                 ),
@@ -265,28 +265,28 @@ class _CreateAccountState extends State<CreateAccount> {
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.vpn_key,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                             8.0,
                           ),
                           borderSide: BorderSide(
-                            color: Color(0xFF003D66),
+                            color: Color(0xFF534DD6),
                           ),
                         ),
                         labelText: 'Password',
                         labelStyle: TextStyle(
                           fontSize: 15.0,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         hintText: 'Enter Password',
                       ),
 //                      autovalidate: true,
                       validator: validatePassword,
-                      style: TextStyle(
-                        color: Color(0xFF003D66),
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF003D66),
+                      // ),
                       obscureText: true,
                     ),
                   ),
@@ -303,7 +303,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         prefixIcon: Icon(
                           Icons.account_box,
                           color: Color(
-                            0xFF003D66,
+                            0xFF534DD6,
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -311,21 +311,21 @@ class _CreateAccountState extends State<CreateAccount> {
                             8.0,
                           ),
                           borderSide: BorderSide(
-                            color: Color(0xFF003D66),
+                            color: Color(0xFF534DD6),
                           ),
                         ),
                         labelText: 'Name',
                         labelStyle: TextStyle(
                           fontSize: 15.0,
-                          color: Color(0xFF003D66),
+                          color: Color(0xFF534DD6),
                         ),
                         hintText: 'Enter Your Name to be displayed to Others',
                       ),
 //                      autovalidate: true,
                       validator: validateDisplayName,
-                      style: TextStyle(
-                        color: Color(0xFF003D66),
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF003D66),
+                      // ),
                     ),
                   ),
                 ),
@@ -344,9 +344,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context)
-                                      .accentColor
-                                      .withOpacity(0.7))),
+                                  Color(0xFF534DD6))),
                           onPressed: () async {
                             if (_emailFormKey.currentState!.validate() &&
                                 _passwordFormKey.currentState!.validate() &&
@@ -417,7 +415,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           child: Text(
                             'Sign Up',
                             style: TextStyle(
-                              color: Color(0xFF003D66),
+                              color: Colors.white,
                               fontSize: 20.0,
                             ),
                           ),
@@ -431,7 +429,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             '/',
                             style: TextStyle(
                               fontSize: 15.0,
-                              color: Color(0xFF003D66),
+                              color: Color(0xFF534DD6),
                             ),
                           ),
                         ),
@@ -445,7 +443,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           'Log In',
                           style: TextStyle(
                               fontSize: 15.0,
-                              color: Color(0xFF003D66),
+                              color: Color(0xFF534DD6),
                               decoration: TextDecoration.underline),
                         ),
                       ),
