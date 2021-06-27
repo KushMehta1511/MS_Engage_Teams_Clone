@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
   //   return await FirebaseAuth.instance.signInWithCredential(credential);
   // }
 
-  //FireBaseRepository _fireBaseRepository = FireBaseRepository();
   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
   //late User currentUser;
 
@@ -57,6 +56,31 @@ class _LoginPageState extends State<LoginPage> {
   late String username;
   late String password;
   final DateTime timestamp = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _auth.authStateChanges().listen((firebaseUser) async {
+      firebaseUser = _auth.currentUser;
+      if (firebaseUser != null) {
+        CircularProgressIndicator();
+        DocumentSnapshot doc = await usersRef.doc(firebaseUser.uid).get();
+        if (doc.exists) {
+          doc = await usersRef.doc(firebaseUser.uid).get();
+        }
+        currentUser = _auth.currentUser!;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(),
+          ),
+        );
+      } else {
+        build(context);
+      }
+    });
+  }
 
   String? validateEmailAddress(String? username) {
     bool emailValid = false;
@@ -124,58 +148,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         );
                       }
-
-                      // else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please create a room before entering",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 1,
-                      //       backgroundColor: Colors.black87,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0);
-                      // }
                     },
                     child: Text("Enter Room")),
               ],
             ),
           ),
-          //actions: <Widget>[
-          //   // IconButton(
-          //   //   icon: Icon(Icons.insert_photo),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(
-          //   //           roomDetails: roomDetails,
-          //   //         ),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   // IconButton(
-          //   //   icon: Icon(Icons.camera),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(roomDetails: roomDetails),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   ElevatedButton(
-          //       onPressed: () {
-          //         _roomFirestore.doc(roomDetails);
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     ChatScreen(roomDetails: roomDetails)));
-          //       },
-          //       child: Text("Create room")),
-          // ],
         );
       },
     );
@@ -221,22 +198,10 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: Container(
-          decoration: BoxDecoration(
-              // gradient: LinearGradient(
-              //   begin: Alignment.topRight,
-              //   end: Alignment.bottomLeft,
-              //   colors: [
-              //     Theme.of(context).primaryColor,
-              //     Theme.of(context).accentColor,
-              //   ],
-              // ),
-
-              ),
+          decoration: BoxDecoration(),
           child: Center(
             child: ListView(
               shrinkWrap: true,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Hero(
                   tag: 'logo',
@@ -356,7 +321,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             // backgroundColor: MaterialStateProperty.all<Color>(
-                            //   Theme.of(context).accentColor.withOpacity(0.7),
+                            //   Theme.of(context).primaryColor.withOpacity(0.7),
                             // ),
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Color(
@@ -371,22 +336,6 @@ class _LoginPageState extends State<LoginPage> {
                               print("login user");
                               print("Username$username");
                               print("Password$password");
-                              // try {
-                              //   UserCredential userCredential =
-                              //       await _auth.signInWithEmailAndPassword(
-                              //           email: username, password: password);
-                              //   Navigator.pushReplacement(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => WelcomePage()));
-                              // } on FirebaseAuthException catch (e) {
-                              //   if (e.code == 'user-not-found') {
-                              //     print('No user found for that email.');
-                              //   } else if (e.code == 'wrong-password') {
-                              //     print(
-                              //         'Wrong password provided for that user.');
-                              //   }
-                              // }
 
                               try {
                                 final user =
@@ -402,17 +351,6 @@ class _LoginPageState extends State<LoginPage> {
                                         .doc(user.hashCode.toString())
                                         .get();
                                   }
-                                  // else {
-                                  //   Fluttertoast.showToast(
-                                  //       msg:
-                                  //           "There is no user record corresponding to this identifier. The user may have been deleted.",
-                                  //       toastLength: Toast.LENGTH_LONG,
-                                  //       gravity: ToastGravity.BOTTOM,
-                                  //       timeInSecForIosWeb: 1,
-                                  //       backgroundColor: Colors.black87,
-                                  //       textColor: Colors.white,
-                                  //       fontSize: 16.0);
-                                  // }
                                   currentUser = (await _auth.currentUser)!;
                                   // chatOptionDialog();
                                   Navigator.pushReplacement(
@@ -422,17 +360,6 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   );
                                 }
-                                // else {
-                                //   Fluttertoast.showToast(
-                                //       msg:
-                                //           "There is no user record corresponding to this identifier. The user may have been deleted.",
-                                //       toastLength: Toast.LENGTH_LONG,
-                                //       gravity: ToastGravity.BOTTOM,
-                                //       timeInSecForIosWeb: 1,
-                                //       backgroundColor: Colors.black87,
-                                //       textColor: Colors.white,
-                                //       fontSize: 16.0);
-                                // }
                               } catch (e) {
                                 Fluttertoast.showToast(
                                     msg:
@@ -459,28 +386,6 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 20.0,
                             ),
                           ),
-                          // child: RaisedButton(
-                          //   shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(
-                          //       30.0,
-                          //     ),
-                          //   ),
-                          //   color: Theme.of(context).accentColor.withOpacity(0.7),
-                          //   elevation: 5.0,
-                          //   onPressed: () {
-                          //     print("login user");
-                          //     print("Username$username");
-                          //     print("Password$password");
-                          //   },
-                          //   padding: EdgeInsets.all(10.0),
-                          //   child: Text(
-                          //     'Log In',
-                          //     style: TextStyle(
-                          //       color: Color(0xFF003D66),
-                          //       fontSize: 20.0,
-                          //     ),
-                          //   ),
-                          // ),
                         ),
                       ),
                       Padding(
@@ -517,41 +422,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                // SizedBox(
-                //   //height: 30.0,
-                //   width: 100.0,
-                //   child: Divider(
-                //     indent: 20.0,
-                //     endIndent: 20.0,
-                //     color: Color(0xFF003D66),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: EdgeInsets.all(10.0),
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       Navigator.pushReplacement(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (context) => ChatScreen(
-                //                     roomDetails: roomDetails,
-                //                   )));
-                //     },
-                //     // onTap: (signInWithGoogle),
-                //     child: Container(
-                //       width: 200.0,
-                //       height: 50.0,
-                //       decoration: BoxDecoration(
-                //         image: DecorationImage(
-                //           image: AssetImage(
-                //             'assets/images/google_signin_button.png',
-                //           ),
-                //           //fit: BoxFit.cover,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

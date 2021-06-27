@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           '/search_screen': (context) => SearchScreen(),
         },
         // theme: ThemeData(
-        //   primarySwatch: Colors.teal,
+        //   primarySwatch: Colors.purple,
         //   accentColor: Colors.blue,
         // ),
         home: LoginPage(),
