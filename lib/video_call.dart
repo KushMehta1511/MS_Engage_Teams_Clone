@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/my_themes.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String roomDetails;
@@ -56,9 +57,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      theme: MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightBlueAccent,
+          // backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: true,
           title: Text(widget.roomDetails),
           leading: IconButton(
@@ -272,8 +277,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 style: TextStyle(color: Colors.white),
               ),
               style: ButtonStyle(
-                  backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => Colors.lightBlueAccent)),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Theme.of(context).accentColor),
+                //backgroundColor: Theme.of(context).accentColor,
+              ),
             ),
           ),
           SizedBox(

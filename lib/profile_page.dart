@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ms_teams_clone_engage/calendar_class.dart';
+import 'package:ms_teams_clone_engage/change_theme_button.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -72,10 +73,88 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  // String splitDisplayName() {
+  //   List<String> userNameSplit = userDisplayName.split(' ');
+  //   if (userNameSplit.length > 1) {
+  //     return userNameSplit[0][0].toUpperCase() +
+  //         " " +
+  //         userNameSplit[userNameSplit.length - 1][0].toUpperCase();
+  //   } else {
+  //     return userNameSplit[0][0].toUpperCase();
+  //   }
+  // }
+
+  // getPhotoUrl() {
+  //   if (isFileNull) {
+  //     if (photoUrl == "") {
+  //       // return AssetImage('assets/images/profile.png');
+  //       return Text(splitDisplayName(),
+  //           style: TextStyle(
+  //               color: Theme.of(context).accentColor, fontSize: 40.0));
+  //     } else {
+  //       return Image.network(photoUrl);
+  //     }
+  //   }
+  // }
+
+  getBackgroundText() {
+    if (isFileNull) {
+      if (photoUrl == "") {
+        // return AssetImage('assets/images/profile.png');
+        // return Text(
+        //   splitDisplayName(),
+        //   style: TextStyle(color: Theme.of(context).accentColor),
+        // );
+        // return AssetImage('assets/images/profile.png');
+        return Text(
+          splitDisplayName(),
+          style: TextStyle(color: Theme.of(context).accentColor),
+        );
+      } else {
+        return null;
+      }
+    } else {
+      if (photoUrl == "") {
+        // return AssetImage('assets/images/profile.png');
+        // return AssetImage('assets/images/profile.png');
+        return Text(
+          splitDisplayName(),
+          style: TextStyle(color: Theme.of(context).accentColor),
+        );
+      } else {
+        return null;
+      }
+    }
+  }
+
+  String splitDisplayName() {
+    List<String> userNameSplit = userDisplayName.split(' ');
+    if (userNameSplit.length > 1) {
+      return userNameSplit[0][0].toUpperCase() +
+          " " +
+          userNameSplit[userNameSplit.length - 1][0].toUpperCase();
+    } else {
+      return userNameSplit[0][0].toUpperCase();
+    }
+  }
+
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
-        return AssetImage('assets/images/profile.png');
+        // return AssetImage('assets/images/profile.png');
+        // return Text(
+        //   splitDisplayName(),
+        //   style: TextStyle(color: Theme.of(context).accentColor),
+        // );
+        return null;
+      } else {
+        return NetworkImage(photoUrl);
+      }
+    } else {
+      if (photoUrl == "") {
+        // return AssetImage('assets/images/profile.png');
+        // return Text(splitDisplayName());
+        return null;
       } else {
         return NetworkImage(photoUrl);
       }
@@ -176,9 +255,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightBlueAccent,
+          // backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: true,
           actions: <Widget>[
+            // ChangeThemeButtonWidget(),
             IconButton(
               onPressed: () {
                 Navigator.push(context,
@@ -211,6 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         CircleAvatar(
                           backgroundColor: Colors.grey,
                           radius: 50.0,
+                          child: getBackgroundText(),
                           backgroundImage: getPhotoUrl(),
                         ),
                         Positioned(
@@ -220,12 +301,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           bottom: -20.0,
                           child: Container(
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFFAFAFA)),
+                              shape: BoxShape.circle,
+                              // color: Color(0xFFFAFAFA),
+                            ),
                             child: IconButton(
                               icon: Icon(
                                 Icons.photo_camera,
-                                color: Colors.black,
+                                color: Theme.of(context).accentColor,
                                 size: 25.0,
                               ),
                               onPressed:
@@ -315,20 +397,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         controller: roomDetailsController,
                         onChanged: (newValue) => roomDetails = newValue,
                         decoration: InputDecoration(
-                          prefixIcon:
-                              Icon(Icons.group, color: Color(0xFF003D66)),
+                          prefixIcon: Icon(Icons.group,
+                              color: Theme.of(context).accentColor),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                               8.0,
                             ),
                             borderSide: BorderSide(
-                              color: Color(0xFF003D66),
+                              color: Theme.of(context).accentColor,
                             ),
                           ),
                           labelText: 'Room Details',
                           labelStyle: TextStyle(
                             fontSize: 15.0,
-                            color: Color(0xFF003D66),
+                            color: Theme.of(context).accentColor,
                           ),
                           hintText: 'Enter Room Id',
                         ),
@@ -344,9 +426,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             return null;
                           }
                         },
-                        style: TextStyle(
-                          color: Color(0xFF003D66),
-                        ),
+                        // style: TextStyle(
+                        //   color: Color(0xFF003D66),
+                        // ),
                       ),
                     ),
                     SizedBox(
