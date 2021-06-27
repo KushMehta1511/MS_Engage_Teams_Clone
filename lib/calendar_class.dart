@@ -33,6 +33,7 @@ class _CalendarClassState extends State<CalendarClass> {
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => EventEditingPage()));

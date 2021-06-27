@@ -107,59 +107,11 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                         );
                       }
-
-                      // } else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please create a room before entering",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 1,
-                      //       backgroundColor: Colors.black87,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0);
-                      // }
                     },
                     child: Text("Enter Room")),
               ],
             ),
           ),
-          //actions: <Widget>[
-          //   // IconButton(
-          //   //   icon: Icon(Icons.insert_photo),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(
-          //   //           roomDetails: roomDetails,
-          //   //         ),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   // IconButton(
-          //   //   icon: Icon(Icons.camera),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(roomDetails: roomDetails),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-
-          //   ElevatedButton(
-          //       onPressed: () {
-          //         _roomFirestore.doc(roomDetails);
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     ChatScreen(roomDetails: roomDetails)));
-          //       },
-          //       child: Text("Create room")),
-          // ],
         );
       },
     );
@@ -191,21 +143,10 @@ class _CreateAccountState extends State<CreateAccount> {
           ),
         ),
         body: Container(
-          decoration: BoxDecoration(
-              // gradient: LinearGradient(
-              //   begin: Alignment.topRight,
-              //   end: Alignment.bottomLeft,
-              //   colors: [
-              //     Theme.of(context).accentColor,
-              //     Theme.of(context).primaryColor,
-              //   ],
-              // ),
-              ),
+          decoration: BoxDecoration(),
           child: Center(
             child: ListView(
               shrinkWrap: true,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(10.0),
@@ -246,11 +187,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         hintText: 'Enter Email address',
                       ),
-//                      autovalidate: true,
                       validator: validateEmailAddress,
-                      // style: TextStyle(
-                      //   color: Color(0xFF003D66),
-                      // ),
                     ),
                   ),
                 ),
@@ -259,7 +196,6 @@ class _CreateAccountState extends State<CreateAccount> {
                       top: 10.0, bottom: 10.0, right: 20.0, left: 20.0),
                   child: Form(
                     key: _passwordFormKey,
-//                    autovalidate: true,
                     child: TextFormField(
                       onSaved: (newValue) => password = newValue!,
                       decoration: InputDecoration(
@@ -282,11 +218,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         hintText: 'Enter Password',
                       ),
-//                      autovalidate: true,
                       validator: validatePassword,
-                      // style: TextStyle(
-                      //   color: Color(0xFF003D66),
-                      // ),
                       obscureText: true,
                     ),
                   ),
@@ -321,11 +253,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                         hintText: 'Enter Your Name to be displayed to Others',
                       ),
-//                      autovalidate: true,
                       validator: validateDisplayName,
-                      // style: TextStyle(
-                      //   color: Color(0xFF003D66),
-                      // ),
                     ),
                   ),
                 ),
@@ -356,21 +284,6 @@ class _CreateAccountState extends State<CreateAccount> {
                               print("Email$email");
                               print("Displayname$displayName");
                               print("Password$password");
-
-                              // try {
-                              //   UserCredential userCredential =
-                              //       await _auth.createUserWithEmailAndPassword(
-                              //           email: email, password: password);
-                              // } on FirebaseAuthException catch (e) {
-                              //   if (e.code == 'weak-password') {
-                              //     print('The password provided is too weak.');
-                              //   } else if (e.code == 'email-already-in-use') {
-                              //     print(
-                              //         'The account already exists for that email.');
-                              //   }
-                              // } catch (e) {
-                              //   print(e);
-                              // }
                               try {
                                 final newUser =
                                     await _auth.createUserWithEmailAndPassword(
@@ -381,17 +294,11 @@ class _CreateAccountState extends State<CreateAccount> {
                                 if (newUser != null) {
                                   await usersRef.doc(currentUser.uid).set({
                                     "id": currentUser.uid,
-                                    //"username": username,
                                     "photoUrl": '',
                                     "email": email,
                                     "displayName": displayName,
                                     "timestamp": timestamp,
                                   });
-                                  // doc = usersRef
-                                  //     .doc(newUser.hashCode.toString())
-                                  //     .get() as DocumentSnapshot<Object?>;
-
-                                  //chatOptionDialog();
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(

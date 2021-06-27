@@ -73,39 +73,9 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  // String splitDisplayName() {
-  //   List<String> userNameSplit = userDisplayName.split(' ');
-  //   if (userNameSplit.length > 1) {
-  //     return userNameSplit[0][0].toUpperCase() +
-  //         " " +
-  //         userNameSplit[userNameSplit.length - 1][0].toUpperCase();
-  //   } else {
-  //     return userNameSplit[0][0].toUpperCase();
-  //   }
-  // }
-
-  // getPhotoUrl() {
-  //   if (isFileNull) {
-  //     if (photoUrl == "") {
-  //       // return AssetImage('assets/images/profile.png');
-  //       return Text(splitDisplayName(),
-  //           style: TextStyle(
-  //               color: Theme.of(context).accentColor, fontSize: 40.0));
-  //     } else {
-  //       return Image.network(photoUrl);
-  //     }
-  //   }
-  // }
-
   getBackgroundText() {
     if (isFileNull) {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(
-        //   splitDisplayName(),
-        //   style: TextStyle(color: Theme.of(context).accentColor),
-        // );
-        // return AssetImage('assets/images/profile.png');
         return Text(
           splitDisplayName(),
           style: TextStyle(color: Theme.of(context).accentColor),
@@ -115,8 +85,6 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     } else {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return AssetImage('assets/images/profile.png');
         return Text(
           splitDisplayName(),
           style: TextStyle(color: Theme.of(context).accentColor),
@@ -141,19 +109,12 @@ class _ProfilePageState extends State<ProfilePage> {
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(
-        //   splitDisplayName(),
-        //   style: TextStyle(color: Theme.of(context).accentColor),
-        // );
         return null;
       } else {
         return NetworkImage(photoUrl);
       }
     } else {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(splitDisplayName());
         return null;
       } else {
         return NetworkImage(photoUrl);
@@ -252,231 +213,221 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          // backgroundColor: Colors.lightBlueAccent,
-          automaticallyImplyLeading: true,
-          actions: <Widget>[
-            // ChangeThemeButtonWidget(),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CalendarClass()));
-              },
-              icon: Icon(Icons.calendar_today),
-            ),
-            IconButton(
-              onPressed: () {
-                _auth.signOut();
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-              icon: Icon(Icons.logout),
-            ),
-          ],
-          title: Text('Profile'),
-        ),
-        body: ListView(
-          children: <Widget>[
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: 50.0,
-                          child: getBackgroundText(),
-                          backgroundImage: getPhotoUrl(),
-                        ),
-                        Positioned(
-                          top: 65.0,
-                          left: 30.0 + 5.0,
-                          right: -(35.0 + 10.0),
-                          bottom: -20.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              // color: Color(0xFFFAFAFA),
-                            ),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.photo_camera,
-                                color: Theme.of(context).accentColor,
-                                size: 25.0,
-                              ),
-                              onPressed:
-                                  isEdit ? null : handleChooseFromGallery,
-                            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CalendarClass()));
+            },
+            icon: Icon(Icons.calendar_today),
+          ),
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
+        title: Text('Profile'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: 50.0,
+                        child: getBackgroundText(),
+                        backgroundImage: getPhotoUrl(),
+                      ),
+                      Positioned(
+                        top: 65.0,
+                        left: 30.0 + 5.0,
+                        right: -(35.0 + 10.0),
+                        bottom: -20.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 12.0),
-                          child: Text(
-                            "Display Name",
-                            style: TextStyle(color: Colors.grey),
-                          )),
-                    ),
-                    Form(
-                      key: _editDisplayNameFormKey,
-                      child: TextFormField(
-                        enabled: isEdit ? false : true,
-                        autofocus: isEdit ? false : true,
-                        readOnly: readOnly,
-                        controller: displayNameController,
-                        onChanged: (value) {
-                          setState(() {
-                            editDisplayName = value;
-                          });
-                        },
-                        validator: (value) {
-                          bool editNameValid = false;
-                          if (value != null) {
-                            editNameValid = value.length > 3 ? true : false;
-                          }
-                          if (!editNameValid) {
-                            return 'Display Name Should be atleast 3 characters long';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Update Display Name",
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.photo_camera,
+                              color: Theme.of(context).primaryColor,
+                              size: 25.0,
+                            ),
+                            onPressed: isEdit ? null : handleChooseFromGallery,
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                        padding: EdgeInsets.only(top: 12.0),
+                        child: Text(
+                          "Display Name",
+                          style: TextStyle(color: Colors.grey),
+                        )),
+                  ),
+                  Form(
+                    key: _editDisplayNameFormKey,
+                    child: TextFormField(
+                      enabled: isEdit ? false : true,
+                      autofocus: isEdit ? false : true,
+                      readOnly: readOnly,
+                      controller: displayNameController,
+                      onChanged: (value) {
+                        setState(() {
+                          editDisplayName = value;
+                        });
+                      },
+                      validator: (value) {
+                        bool editNameValid = false;
+                        if (value != null) {
+                          editNameValid = value.length > 3 ? true : false;
+                        }
+                        if (!editNameValid) {
+                          return 'Display Name Should be atleast 3 characters long';
+                        } else {
+                          return null;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Update Display Name",
+                      ),
                     ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: ButtonTheme(
-                        minWidth: 200.0,
-                        height: 40.0,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
-                            ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: ButtonTheme(
+                      minWidth: 200.0,
+                      height: 40.0,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
                           ),
-                          color: Theme.of(context).accentColor.withOpacity(0.7),
-                          elevation: 5.0,
-                          onPressed: isEdit ? editProfile : updateProfile,
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            isEdit ? 'Edit Profile' : 'UpdateProfile',
-                            style: TextStyle(
-                              color: Color(0xFF003D66),
-                              fontSize: 20.0,
-                            ),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                        elevation: 5.0,
+                        onPressed: isEdit ? editProfile : updateProfile,
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          isEdit ? 'Edit Profile' : 'UpdateProfile',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 200,
-                    ),
-                    Form(
-                      key: _roomFormKey,
-                      child: TextFormField(
-                        controller: roomDetailsController,
-                        onChanged: (newValue) => roomDetails = newValue,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.group,
-                              color: Theme.of(context).accentColor),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
-                            ),
-                            borderSide: BorderSide(
-                              color: Theme.of(context).accentColor,
-                            ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Form(
+                    key: _roomFormKey,
+                    child: TextFormField(
+                      controller: roomDetailsController,
+                      onChanged: (newValue) => roomDetails = newValue,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.group,
+                            color: Theme.of(context).primaryColor),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
                           ),
-                          labelText: 'Room Details',
-                          labelStyle: TextStyle(
-                            fontSize: 15.0,
-                            color: Theme.of(context).accentColor,
+                          borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor,
                           ),
-                          hintText: 'Enter Room Id',
                         ),
-                        //                      autovalidate: true,
-                        validator: (value) {
-                          bool roomValid = false;
-                          if (value != null) {
-                            roomValid = value.length > 3 ? true : false;
-                          }
-                          if (!roomValid) {
-                            return 'Room Name should be greater than 3';
-                          } else {
-                            return null;
-                          }
-                        },
-                        // style: TextStyle(
-                        //   color: Color(0xFF003D66),
-                        // ),
+                        labelText: 'Room Details',
+                        labelStyle: TextStyle(
+                          fontSize: 15.0,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        hintText: 'Enter Room Id',
                       ),
+                      validator: (value) {
+                        bool roomValid = false;
+                        if (value != null) {
+                          roomValid = value.length > 3 ? true : false;
+                        }
+                        if (!roomValid) {
+                          return 'Room Name should be greater than 3';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: ButtonTheme(
-                        minWidth: 200.0,
-                        height: 40.0,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
-                            ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: ButtonTheme(
+                      minWidth: 200.0,
+                      height: 40.0,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            8.0,
                           ),
-                          color: Theme.of(context).accentColor.withOpacity(0.7),
-                          elevation: 5.0,
-                          onPressed: () {
-                            if (_roomFormKey.currentState!.validate()) {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                    roomDetails: roomDetails,
-                                  ),
+                        ),
+                        color: Theme.of(context).primaryColor,
+                        elevation: 5.0,
+                        onPressed: () {
+                          if (_roomFormKey.currentState!.validate()) {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  roomDetails: roomDetails,
                                 ),
-                              );
-                            }
-                          },
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            "Enter Room",
-                            style: TextStyle(
-                              color: Color(0xFF003D66),
-                              fontSize: 20.0,
-                            ),
+                              ),
+                            );
+                          }
+                        },
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          "Enter Room",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

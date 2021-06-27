@@ -42,8 +42,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late TextEditingController smsMobileTextEditingController =
       TextEditingController();
-  //late PickedFile file;
-  //final ImagePicker _picker = ImagePicker();
   bool isFileNull = true;
   late String emailDetails = "@mail.com";
   late var mobileNumberDetails = "1234567890";
@@ -89,12 +87,6 @@ class _ChatScreenState extends State<ChatScreen> {
   getBackgroundText() {
     if (isFileNull) {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(
-        //   splitDisplayName(),
-        //   style: TextStyle(color: Theme.of(context).accentColor),
-        // );
-        // return AssetImage('assets/images/profile.png');
         return Text(
           splitDisplayName(),
           style: TextStyle(color: Theme.of(context).accentColor),
@@ -104,11 +96,9 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     } else {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return AssetImage('assets/images/profile.png');
         return Text(
           splitDisplayName(),
-          style: TextStyle(color: Theme.of(context).accentColor),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         );
       } else {
         return null;
@@ -130,55 +120,18 @@ class _ChatScreenState extends State<ChatScreen> {
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(
-        //   splitDisplayName(),
-        //   style: TextStyle(color: Theme.of(context).accentColor),
-        // );
         return null;
       } else {
         return NetworkImage(photoUrl);
       }
     } else {
       if (photoUrl == "") {
-        // return AssetImage('assets/images/profile.png');
-        // return Text(splitDisplayName());
         return null;
       } else {
         return NetworkImage(photoUrl);
       }
     }
   }
-
-  // handleChooseFromGallery() async {
-  //   PickedFile? file = await _picker.getImage(source: ImageSource.gallery);
-  //   setState(() {
-  //     this.file = file!;
-  //     isFileNull = false;
-  //   });
-  // }
-
-  // compressImage() async {
-  //   final tempDir = await getTemporaryDirectory();
-  //   final path = tempDir.path;
-  //   Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
-  //   final compressedImageFile = File('$path/img_${loggedInUser.uid}.jpg')
-  //     ..writeAsBytesSync(
-  //       Im.encodeJpg(imageFile, quality: 60),
-  //     );
-  //   setState(() {
-  //     file = compressedImageFile as PickedFile;
-  //   });
-  // }
-
-  // Future<String> uploadImage(imageFile) async {
-  //   compressImage();
-  //   StorageUploadTask uploadTask =
-  //       storageRef.child("profile_${currentUser.id}.jpg").putFile(imageFile);
-  //   StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
-  //   String downloadUrl = await storageSnap.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
 
   signout() {
     _auth.signOut();
@@ -246,59 +199,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           throw 'Could Not Launch $url';
                         }
                       }
-
-                      // } else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please create a room before entering",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 1,
-                      //       backgroundColor: Colors.black87,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0);
-                      // }
                     },
                     child: Text("Open Email Draft")),
               ],
             ),
           ),
-          //actions: <Widget>[
-          //   // IconButton(
-          //   //   icon: Icon(Icons.insert_photo),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(
-          //   //           roomDetails: roomDetails,
-          //   //         ),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   // IconButton(
-          //   //   icon: Icon(Icons.camera),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(roomDetails: roomDetails),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-
-          //   ElevatedButton(
-          //       onPressed: () {
-          //         _roomFirestore.doc(roomDetails);
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     ChatScreen(roomDetails: roomDetails)));
-          //       },
-          //       child: Text("Create room")),
-          // ],
         );
       },
     );
@@ -347,59 +252,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           throw 'Could Not Call $url';
                         }
                       }
-
-                      // } else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please create a room before entering",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 1,
-                      //       backgroundColor: Colors.black87,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0);
-                      // }
                     },
                     child: Text("Make a call")),
               ],
             ),
           ),
-          //actions: <Widget>[
-          //   // IconButton(
-          //   //   icon: Icon(Icons.insert_photo),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(
-          //   //           roomDetails: roomDetails,
-          //   //         ),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   // IconButton(
-          //   //   icon: Icon(Icons.camera),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(roomDetails: roomDetails),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-
-          //   ElevatedButton(
-          //       onPressed: () {
-          //         _roomFirestore.doc(roomDetails);
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     ChatScreen(roomDetails: roomDetails)));
-          //       },
-          //       child: Text("Create room")),
-          // ],
         );
       },
     );
@@ -448,59 +305,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           throw 'Could Not Call $url';
                         }
                       }
-
-                      // } else {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please create a room before entering",
-                      //       toastLength: Toast.LENGTH_LONG,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 1,
-                      //       backgroundColor: Colors.black87,
-                      //       textColor: Colors.white,
-                      //       fontSize: 16.0);
-                      // }
                     },
                     child: Text("Send an SMS")),
               ],
             ),
           ),
-          //actions: <Widget>[
-          //   // IconButton(
-          //   //   icon: Icon(Icons.insert_photo),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(
-          //   //           roomDetails: roomDetails,
-          //   //         ),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-          //   // IconButton(
-          //   //   icon: Icon(Icons.camera),
-          //   //   onPressed: () {
-          //   //     Navigator.push(
-          //   //       context,
-          //   //       MaterialPageRoute(
-          //   //         builder: (context) => ChatScreen(roomDetails: roomDetails),
-          //   //       ),
-          //   //     );
-          //   //   },
-          //   // ),
-
-          //   ElevatedButton(
-          //       onPressed: () {
-          //         _roomFirestore.doc(roomDetails);
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     ChatScreen(roomDetails: roomDetails)));
-          //       },
-          //       child: Text("Create room")),
-          // ],
         );
       },
     );
@@ -509,81 +318,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: Drawer(
-      //   child: ListView(
-      //     // Important: Remove any padding from the ListView.
-      //     padding: EdgeInsets.zero,
-      //     children: <Widget>[
-      //       DrawerHeader(
-      //         decoration: BoxDecoration(
-      //           color: Colors.blue,
-      //         ),
-      //         // child: CircleAvatar(
-      //         //   backgroundColor: Colors.grey,
-      //         //   radius: 50.0,
-      //         //   backgroundImage: getPhotoUrl(),
-      //         // ),
-      //         child: Stack(
-      //           children: <Widget>[
-      //             ElevatedButton(
-      //               style: ElevatedButton.styleFrom(
-      //                 primary: Colors.transparent,
-      //                 shadowColor: Colors.transparent,
-      //               ),
-      //               onPressed: () {
-      //                 Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                         builder: (context) => ProfilePage()));
-      //               },
-      //               child: CircleAvatar(
-      //                 backgroundColor: Colors.grey,
-      //                 radius: 50.0,
-      //                 backgroundImage: getPhotoUrl(),
-      //               ),
-      //             ),
-      //             // Positioned(
-      //             //   top: 65.0,
-      //             //   left: 30.0 + 5.0,
-      //             //   right: -(35.0 + 10.0),
-      //             //   bottom: -20.0,
-      //             //   child: Container(
-      //             //     decoration: BoxDecoration(
-      //             //         shape: BoxShape.circle, color: Color(0xFFFAFAFA)),
-      //             //     child: IconButton(
-      //             //       icon: Icon(
-      //             //         Icons.photo_camera,
-      //             //         color: Colors.black,
-      //             //         size: 25.0,
-      //             //       ),
-      //             //       onPressed: handleChooseFromGallery,
-      //             //     ),
-      //             //   ),
-      //             // ),
-      //           ],
-      //         ),
-      //       ),
-      //       ListTile(
-      //         title: Text(userDisplayName),
-      //         onTap: () {
-      //           // Update the state of the app
-      //           // ...
-      //           // Then close the drawer
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //       ListTile(
-      //         title: Text('Item 2'),
-      //         onTap: () {
-      //           // Update the state of the app
-      //           // ...
-      //           // Then close the drawer
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
       appBar: AppBar(
         leading: CloseButton(
           onPressed: () {
@@ -599,19 +333,11 @@ class _ChatScreenState extends State<ChatScreen> {
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Center(
-                //   child: CircleAvatar(
-                //     backgroundColor: Colors.grey,
-                //     backgroundImage: getPhotoUrl(),
-                //   ),
-                // ),
-              ],
+              children: [],
             ),
           ],
         ),
         actions: <Widget>[
-          // ChangeThemeButtonWidget(),
           IconButton(
               onPressed: () {
                 Navigator.push(
@@ -672,16 +398,7 @@ class _ChatScreenState extends State<ChatScreen> {
               }
             },
           ),
-          // IconButton(
-          //     icon: Icon(Icons.logout),
-          //     onPressed: () {
-          //       _auth.signOut();
-          //       Navigator.pop(context);
-          //       Navigator.push(context,
-          //           MaterialPageRoute(builder: (context) => LoginPage()));
-          //     }),
         ],
-        // backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
         child: Column(
@@ -696,7 +413,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                      color: Theme.of(context).accentColor, width: 2.0),
+                      color: Theme.of(context).primaryColor, width: 2.0),
                 ),
               ),
               child: Row(
@@ -739,10 +456,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
                       messageText = "";
                     },
-                    // child: Text(
-                    //   'Send',
-                    //   style: kSendButtonTextStyle,
-                    // ),
                     child: Icon(Icons.send),
                   ),
                 ],
@@ -776,17 +489,15 @@ class MessagesStream extends StatelessWidget {
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           );
         }
         final messages = snapshot.data!.docs;
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
-          //final messageText = message.data['text'];
           final messageText = message.get('text');
           final messageSender = message.get('sender');
-          //final messageSender = loggedInUser.displayName;
 
           final currentUser = userDisplayName;
 
@@ -821,14 +532,6 @@ class MessageBubble extends StatelessWidget {
   final String text;
   final bool isMe;
 
-  // getPhotoUrl() {
-  //   if (photoUrl == "") {
-  //     return AssetImage('assets/images/profile.png');
-  //   } else {
-  //     return NetworkImage(photoUrl);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -856,13 +559,13 @@ class MessageBubble extends StatelessWidget {
                     topRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isMe ? Theme.of(context).accentColor : Colors.white,
+            color: isMe ? Theme.of(context).primaryColor : Colors.white,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 text,
                 style: TextStyle(
-                  color: isMe ? Colors.black54 : Colors.black54,
+                  color: isMe ? Colors.white : Colors.black54,
                   fontSize: 15.0,
                 ),
               ),

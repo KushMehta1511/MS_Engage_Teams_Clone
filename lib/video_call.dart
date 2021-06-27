@@ -63,7 +63,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       darkTheme: MyThemes.darkTheme,
       home: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Colors.lightBlueAccent,
           automaticallyImplyLeading: true,
           title: Text(widget.roomDetails),
           leading: IconButton(
@@ -126,20 +125,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           SizedBox(
             height: 16.0,
           ),
-          // TextField(
-          //   controller: serverText,
-          //   decoration: InputDecoration(
-          //       border: OutlineInputBorder(),
-          //       labelText: "Server URL",
-          //       hintText: "Hint: Leave empty for meet.jitsi.si"),
-          // ),
-          // SizedBox(
-          //   height: 14.0,
-          // ),
           Form(
             key: _roomFormKey,
             child: TextFormField(
-              //controller: roomText,
               initialValue: widget.roomDetails,
               enabled: false,
               decoration: InputDecoration(
@@ -225,13 +213,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           SizedBox(
             height: 14.0,
           ),
-          // TextField(
-          //   controller: iosAppBarRGBAColor,
-          //   decoration: InputDecoration(
-          //       border: OutlineInputBorder(),
-          //       labelText: "AppBar Color(IOS only)",
-          //       hintText: "Hint: This HAS to be in HEX RGBA format"),
-          // ),
           SizedBox(
             height: 14.0,
           ),
