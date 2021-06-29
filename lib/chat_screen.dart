@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ms_teams_clone_engage/constants.dart';
+import 'package:ms_teams_clone_engage/file_upload.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/video_call.dart';
@@ -339,13 +340,28 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: <Widget>[
           IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FileUploadPage(
+                    roomDetails: widget.roomDetails,
+                  ),
+                ),
+              );
+            },
+            icon: Icon(Icons.attach_file),
+          ),
+          IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => VideoCallScreen(
-                              roomDetails: widget.roomDetails,
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                      roomDetails: widget.roomDetails,
+                    ),
+                  ),
+                );
               },
               icon: Icon(Icons.video_call)),
           PopupMenuButton<optionsMenu>(

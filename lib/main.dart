@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ms_teams_clone_engage/event_provider.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:ms_teams_clone_engage/my_themes.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
