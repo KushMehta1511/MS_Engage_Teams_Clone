@@ -36,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _messageDetailFormKey = GlobalKey<FormState>();
   late String userDisplayName = "Name";
   late String photoUrl = "";
+  late String userEmailAddress = "123@gmail.com";
   late TextEditingController emailTextEditingController =
       TextEditingController();
   late TextEditingController mobileTextEditingController =
@@ -80,6 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
           print(element['displayName']);
           userDisplayName = element['displayName'];
           photoUrl = element['photoUrl'];
+          userEmailAddress = loggedInUser.email!;
         });
       });
     });
@@ -424,6 +426,7 @@ class _ChatScreenState extends State<ChatScreen> {
             MessagesStream(
               roomDetails: widget.roomDetails,
               userDisplayName: userDisplayName,
+              userEmailAddress: userEmailAddress,
             ),
             Container(
               decoration: BoxDecoration(
@@ -466,6 +469,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             .add({
                           'text': messageText,
                           'sender': userDisplayName,
+                          'senderEmail': userEmailAddress,
                           'timestamp': timestamp,
                         });
                       }
@@ -487,12 +491,14 @@ class _ChatScreenState extends State<ChatScreen> {
 class MessagesStream extends StatelessWidget {
   final String roomDetails;
   final String userDisplayName;
+  final String userEmailAddress;
 
-  const MessagesStream({
-    Key? key,
-    required this.roomDetails,
-    required this.userDisplayName,
-  }) : super(key: key);
+  const MessagesStream(
+      {Key? key,
+      required this.roomDetails,
+      required this.userDisplayName,
+      required this.userEmailAddress})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -514,13 +520,15 @@ class MessagesStream extends StatelessWidget {
         for (var message in messages) {
           final messageText = message.get('text');
           final messageSender = message.get('sender');
+          final messageSenderEmailAddress = message.get('senderEmail');
 
           final currentUser = userDisplayName;
+          final currentUserEmailAddress = userEmailAddress;
 
           final messageBubble = MessageBubble(
             sender: messageSender,
             text: messageText,
-            isMe: currentUser == messageSender,
+            isMe: currentUserEmailAddress == messageSenderEmailAddress,
           );
 
           messageBubbles.add(messageBubble);

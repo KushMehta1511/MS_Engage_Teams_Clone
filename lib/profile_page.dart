@@ -185,7 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
     final _picker = ImagePicker();
     PickedFile image;
     final _storage = FirebaseStorage.instance;
-
     var permission = await Permission.photos.request();
     var permissionStatus = permission;
     if (permissionStatus.isGranted == true) {

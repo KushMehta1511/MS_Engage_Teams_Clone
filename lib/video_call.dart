@@ -21,7 +21,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   final _auth = FirebaseAuth.instance;
   final serverText = TextEditingController();
   final roomText = TextEditingController();
-  late final roomTextValue = "";
+  late final roomTextValue = widget.roomDetails;
   final subjectText = TextEditingController();
   late var subjectTextValue = "";
   final nameText = TextEditingController(text: currentUser.displayName);
@@ -58,11 +58,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: MyThemes.lightTheme,
-      darkTheme: MyThemes.darkTheme,
+      // themeMode: ThemeMode.system,
+      // theme: MyThemes.lightTheme,
+      // darkTheme: MyThemes.darkTheme,
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: MaterialStateColor.resolveWith(
+              (states) => Theme.of(context).accentColor),
           automaticallyImplyLeading: true,
           title: Text(widget.roomDetails),
           leading: IconButton(
