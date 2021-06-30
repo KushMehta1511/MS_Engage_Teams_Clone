@@ -15,6 +15,7 @@ import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final _files = FirebaseFirestore.instance.collection('files');
 
@@ -165,19 +166,33 @@ class _FileUploadPageState extends State<FileUploadPage> {
     }
   }
 
-  getPhotoUrl(String userDetail) {
-    String photoUrl = "";
-    _usersRef.where('id', isEqualTo: userDetail).get().then((value) {
-      value.docs.forEach((element) {
-        setState(() {
-          photoUrl = element['photoUrl'];
-        });
-      });
-    });
-    if (photoUrl == "") {
-      return null;
+  // getPhotoUrl(String userDetail) {
+  //   String photoUrl = "";
+  //   _usersRef.where('id', isEqualTo: userDetail).get().then((value) {
+  //     value.docs.forEach((element) {
+  //       setState(() {
+  //         photoUrl = element['photoUrl'];
+  //       });
+  //     });
+  //   });
+  //   if (photoUrl == "") {
+  //     return null;
+  //   } else {
+  //     return NetworkImage(photoUrl);
+  //   }
+  // }
+
+  getPhotoUrl(String fileName) {
+    List<String> extensions = fileName.split('.');
+    if (extensions[extensions.length - 1] == 'jpeg' ||
+        extensions[extensions.length - 1] == 'jpg') {
+      return AssetImage('assets/images/jpeg_logo.jpg');
+    } else if (extensions[extensions.length - 1] == 'pdf') {
+      return AssetImage('assets/images/pdf_logo.png');
+    } else if (extensions[extensions.length - 1] == 'docx') {
+      return AssetImage('assets/images/word_logo.png');
     } else {
-      return NetworkImage(photoUrl);
+      return null;
     }
   }
 
@@ -196,7 +211,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
   _downloadFile(QueryDocumentSnapshot documentSnapshot) async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
-      final baseStorage = await getExternalStorageDirectory();
+      final baseStorage = await getDownloadsDirectory();
       final id = await FlutterDownloader.enqueue(
           url: documentSnapshot['fileUrl'],
           savedDir: baseStorage!.path,
@@ -260,6 +275,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
             .collection('files')
             .doc(widget.roomDetails)
             .collection('roomFiles')
+            .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -280,14 +296,17 @@ class _FileUploadPageState extends State<FileUploadPage> {
           return ListView(
             children: snapshot.data!.docs.map((document) {
               String uid = document['uploader'];
+              String displayName = document['uploaderDisplayName'];
               return Column(
                 children: [
                   Container(
                     child: ListTile(
+                      trailing: Text(
+                          '${timeago.format(document['timestamp'].toDate())}'),
                       leading: CircleAvatar(
                         backgroundColor: Colors.grey,
-                        child: getBackgroundText(uid),
-                        backgroundImage: getPhotoUrl(uid),
+                        // child: getBackgroundText(uid),
+                        backgroundImage: getPhotoUrl(document['fileName']),
                       ),
                       title: Text(
                         document['fileName'],
@@ -295,7 +314,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline),
                       ),
-                      // subtitle: Text(getDisplayName(document['uploader'])),
+                      // subtitle: Text(displayName),
                       onTap: () {
                         _downloadFile(document);
                       },
@@ -440,6 +459,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
           _files.doc(widget.roomDetails).collection('roomFiles').add({
             'fileUrl': urlDownload,
             'uploader': currentUser.uid,
+            'uploaderDisplayName': _auth.currentUser!.displayName,
             'timestamp': DateTime.now(),
             'filePath': 'files/${currentUser.uid}/$fileName',
             'fileName': fileName,
