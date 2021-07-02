@@ -211,7 +211,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
   _downloadFile(QueryDocumentSnapshot documentSnapshot) async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
-      final baseStorage = await getDownloadsDirectory();
+      final baseStorage = await getExternalStorageDirectory();
+      print(baseStorage);
       final id = await FlutterDownloader.enqueue(
           url: documentSnapshot['fileUrl'],
           savedDir: baseStorage!.path,

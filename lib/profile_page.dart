@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ms_teams_clone_engage/calendar_class.dart';
 import 'package:ms_teams_clone_engage/change_theme_button.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
+import 'package:ms_teams_clone_engage/dashboard.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -210,12 +212,32 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Color getBackgroundColor() {
+    List<Color> colors = [];
+    colors.add(Colors.blue);
+    colors.add(Colors.teal);
+    colors.add(Colors.red);
+    colors.add(Colors.orange);
+    colors.add(Colors.green);
+    colors.add(Colors.pink);
+    Random randColInd = new Random();
+    int nextInd = randColInd.nextInt(6);
+    return colors[nextInd];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DashboardClass()));
+            },
+            icon: Icon(Icons.group),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(context,
@@ -246,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Stack(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundColor: Colors.grey,
+                        backgroundColor: getBackgroundColor(),
                         radius: 50.0,
                         child: getBackgroundText(),
                         backgroundImage: getPhotoUrl(),
