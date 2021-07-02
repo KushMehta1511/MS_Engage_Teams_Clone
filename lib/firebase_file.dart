@@ -102,9 +102,10 @@ class FirebaseFile extends StatelessWidget {
   _downloadFile() async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
-      final baseStorage = await getExternalStorageDirectory();
+      final baseStorage = await getApplicationDocumentsDirectory();
+      print(baseStorage.toString());
       final id = await FlutterDownloader.enqueue(
-          url: fileUrl, savedDir: baseStorage!.path, fileName: fileName);
+          url: fileUrl, savedDir: baseStorage.path, fileName: fileName);
     } else {
       Fluttertoast.showToast(
           msg: "Please grant permission to store files",

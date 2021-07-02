@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -318,6 +319,19 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Color getBackgroundColor() {
+    List<Color> colors = [];
+    colors.add(Colors.blue);
+    colors.add(Colors.teal);
+    colors.add(Colors.red);
+    colors.add(Colors.orange);
+    colors.add(Colors.green);
+    colors.add(Colors.pink);
+    Random randColInd = new Random();
+    int nextInd = randColInd.nextInt(6);
+    return colors[nextInd];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -452,7 +466,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           prefixIcon: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CircleAvatar(
-                              backgroundColor: Colors.grey,
+                              backgroundColor: getBackgroundColor(),
                               child: getBackgroundText(),
                               backgroundImage: getPhotoUrl(),
                             ),
@@ -471,6 +485,16 @@ class _ChatScreenState extends State<ChatScreen> {
                           'sender': userDisplayName,
                           'senderEmail': userEmailAddress,
                           'timestamp': timestamp,
+                        });
+                        FirebaseFirestore.instance
+                            .collection('dashboard')
+                            .doc(currentUser.uid)
+                            .collection('rooms')
+                            .doc(widget.roomDetails)
+                            .set({
+                          'roomName': widget.roomDetails,
+                          'userEmail': currentUser.email,
+                          'uid': currentUser.uid
                         });
                       }
 

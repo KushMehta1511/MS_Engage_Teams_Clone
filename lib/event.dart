@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,4 +17,12 @@ class Event {
       required this.to,
       this.backgroundColor = Colors.teal,
       this.isAllDay = false});
+
+  // factory Event.fromDocument(DocumentSnapshot doc) {
+  //   return Event(
+  //       description: doc['description'],
+  //       from: doc['from'],
+  //       title: doc['title'],
+  //       to: doc['to']);
+  // }
 }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ms_teams_clone_engage/event.dart';
@@ -197,6 +199,16 @@ class _EventEditingPageState extends State<EventEditingPage> {
   Future saveForm() async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
+      FirebaseFirestore.instance
+          .collection('calendarEvents')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('events')
+          .add({
+        'title': titleController.text,
+        'description': 'Description',
+        'from': fromDate,
+        'to': toDate
+      });
       final event = Event(
           title: titleController.text,
           description: 'Description',
