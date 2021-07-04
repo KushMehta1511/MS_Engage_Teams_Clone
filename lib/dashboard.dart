@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 
 class DashboardClass extends StatefulWidget {
@@ -85,6 +86,8 @@ class _DashboardClassState extends State<DashboardClass> {
                         ),
                       ),
                       onTap: () {
+                        InternetConnectionStatusClass
+                            .getInternetConnectionStatus();
                         Navigator.pop(context);
                         Navigator.push(
                           context,
@@ -112,6 +115,7 @@ class _DashboardClassState extends State<DashboardClass> {
   }
 
   onPressed() {
+    InternetConnectionStatusClass.getInternetConnectionStatus();
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -177,7 +181,7 @@ class _DashboardClassState extends State<DashboardClass> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text("Rooms"),
+        title: Text("Meetings"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Container(

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/logged_user.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
 import 'package:ms_teams_clone_engage/profile_page.dart';
@@ -274,6 +275,8 @@ class _CreateAccountState extends State<CreateAccount> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Color(0xFF534DD6))),
                           onPressed: () async {
+                            InternetConnectionStatusClass
+                                .getInternetConnectionStatus();
                             if (_emailFormKey.currentState!.validate() &&
                                 _passwordFormKey.currentState!.validate() &&
                                 _displayNameFormKey.currentState!.validate()) {

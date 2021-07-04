@@ -11,7 +11,9 @@ import 'package:ms_teams_clone_engage/calendar_class.dart';
 import 'package:ms_teams_clone_engage/change_theme_button.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/dashboard.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -125,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   editProfile() {
+    InternetConnectionStatusClass.getInternetConnectionStatus();
     setState(() {
       isEdit = false;
       readOnly = false;
@@ -133,6 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   updateProfile() async {
+    InternetConnectionStatusClass.getInternetConnectionStatus();
     setState(() {
       if (!_editDisplayNameFormKey.currentState!.validate()) {
         setState(() {
@@ -184,31 +188,41 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   handleChooseFromGallery() async {
-    final _picker = ImagePicker();
-    PickedFile image;
-    final _storage = FirebaseStorage.instance;
-    var permission = await Permission.photos.request();
-    var permissionStatus = permission;
-    if (permissionStatus.isGranted == true) {
-      image = (await _picker.getImage(source: ImageSource.gallery))!;
-      var file = File(image.path);
-      if (image != null) {
-        setState(() {
-          isFileNull = false;
-        });
-        var storageSnapshot = await _storage
-            .ref()
-            .child('profileImages/${currentUser.uid}/photo')
-            .putFile(file);
-        var downloadUrl = await storageSnapshot.ref.getDownloadURL();
-        setState(() {
-          photoUrl = downloadUrl;
-        });
+    InternetConnectionStatusClass.getInternetConnectionStatus();
+    try {
+      final _picker = ImagePicker();
+      PickedFile image;
+      final _storage = FirebaseStorage.instance;
+      var permission = await Permission.photos.request();
+      var permissionStatus = permission;
+      if (permissionStatus.isGranted == true) {
+        image = (await _picker.getImage(source: ImageSource.gallery))!;
+        var file = File(image.path);
+        if (image != null) {
+          setState(() {
+            isFileNull = false;
+          });
+          var storageSnapshot = await _storage
+              .ref()
+              .child('profileImages/${currentUser.uid}/photo')
+              .putFile(file);
+          var downloadUrl = await storageSnapshot.ref.getDownloadURL();
+          setState(() {
+            photoUrl = downloadUrl;
+          });
+        } else {
+          print('No Path Received');
+        }
       } else {
-        print('No Path Received');
+        print('Grant Permissions and start again');
       }
-    } else {
-      print('Grant Permissions and start again');
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          gravity: ToastGravity.BOTTOM,
+          toastLength: Toast.LENGTH_SHORT);
     }
   }
 
@@ -233,13 +247,15 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
+              InternetConnectionStatusClass.getInternetConnectionStatus();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DashboardClass()));
             },
-            icon: Icon(Icons.group),
+            icon: Icon(Icons.meeting_room_outlined),
           ),
           IconButton(
             onPressed: () {
+              InternetConnectionStatusClass.getInternetConnectionStatus();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CalendarClass()));
             },
@@ -247,10 +263,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           IconButton(
             onPressed: () {
+              InternetConnectionStatusClass.getInternetConnectionStatus();
               _auth.signOut();
               Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()));
             },
             icon: Icon(Icons.logout),
           ),
@@ -421,6 +438,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Theme.of(context).primaryColor,
                         elevation: 5.0,
                         onPressed: () {
+                          InternetConnectionStatusClass
+                              .getInternetConnectionStatus();
                           if (_roomFormKey.currentState!.validate()) {
                             Navigator.pop(context);
                             Navigator.push(
