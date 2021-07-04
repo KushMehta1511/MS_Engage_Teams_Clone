@@ -10,7 +10,7 @@ class Event {
   final Color backgroundColor;
   final bool isAllDay;
 
-  const Event(
+  Event(
       {required this.title,
       required this.description,
       required this.from,
@@ -18,11 +18,11 @@ class Event {
       this.backgroundColor = Colors.teal,
       this.isAllDay = false});
 
-  // factory Event.fromDocument(DocumentSnapshot doc) {
-  //   return Event(
-  //       description: doc['description'],
-  //       from: doc['from'],
-  //       title: doc['title'],
-  //       to: doc['to']);
-  // }
+  factory Event.fromDocument(DocumentSnapshot doc) {
+    return Event(
+        description: doc['description'],
+        from: doc['from'],
+        title: doc['title'],
+        to: doc['to']);
+  }
 }

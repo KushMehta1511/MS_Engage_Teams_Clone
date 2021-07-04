@@ -4,9 +4,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_teams_clone_engage/constants.dart';
 import 'package:ms_teams_clone_engage/file_upload.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/main.dart';
 import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/video_call.dart';
 //import 'package:image_picker/image_picker.dart';
@@ -74,7 +77,12 @@ class _ChatScreenState extends State<ChatScreen> {
   void getDisplayName() async {
     DocumentSnapshot doc = await _usersRef.doc(loggedInUser.uid).get();
     if (!doc.exists) {
-      CircularProgressIndicator();
+      Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+      // CircularProgressIndicator();
     }
     _usersRef.where('email', isEqualTo: loggedInUser.email).get().then((value) {
       value.docs.forEach((element) {
@@ -140,8 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
   signout() {
     _auth.signOut();
     Navigator.pop(context);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
   }
 
   String? validateEmailAddress(String? username) {
@@ -357,6 +364,7 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
+              InternetConnectionStatusClass.getInternetConnectionStatus();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -370,6 +378,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           IconButton(
               onPressed: () {
+                InternetConnectionStatusClass.getInternetConnectionStatus();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -475,27 +484,38 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
+                      InternetConnectionStatusClass
+                          .getInternetConnectionStatus();
                       messageTextController.clear();
-                      if (messageText != "") {
-                        _firestore
-                            .doc(widget.roomDetails)
-                            .collection('messages')
-                            .add({
-                          'text': messageText,
-                          'sender': userDisplayName,
-                          'senderEmail': userEmailAddress,
-                          'timestamp': timestamp,
-                        });
-                        FirebaseFirestore.instance
-                            .collection('dashboard')
-                            .doc(currentUser.uid)
-                            .collection('rooms')
-                            .doc(widget.roomDetails)
-                            .set({
-                          'roomName': widget.roomDetails,
-                          'userEmail': currentUser.email,
-                          'uid': currentUser.uid
-                        });
+                      try {
+                        if (messageText != "") {
+                          _firestore
+                              .doc(widget.roomDetails)
+                              .collection('messages')
+                              .add({
+                            'text': messageText,
+                            'sender': userDisplayName,
+                            'senderEmail': userEmailAddress,
+                            'timestamp': timestamp,
+                          });
+                          FirebaseFirestore.instance
+                              .collection('dashboard')
+                              .doc(currentUser.uid)
+                              .collection('rooms')
+                              .doc(widget.roomDetails)
+                              .set({
+                            'roomName': widget.roomDetails,
+                            'userEmail': currentUser.email,
+                            'uid': currentUser.uid
+                          });
+                        }
+                      } catch (e) {
+                        Fluttertoast.showToast(
+                            msg: e.toString(),
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            gravity: ToastGravity.BOTTOM,
+                            toastLength: Toast.LENGTH_SHORT);
                       }
 
                       messageText = "";

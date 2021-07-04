@@ -3,12 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/logged_user.dart';
 import 'package:ms_teams_clone_engage/profile_page.dart';
 import 'package:ms_teams_clone_engage/resources/firebase_repo.dart';
 import 'package:ms_teams_clone_engage/signup_page.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ms_teams_clone_engage/welcome_page.dart';
 
@@ -25,23 +26,24 @@ final CollectionReference _roomFirestore =
     FirebaseFirestore.instance.collection('room');
 
 class _LoginPageState extends State<LoginPage> {
-  // Future<UserCredential> signInWithGoogle() async {
-  //   // Trigger the authentication flow
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<UserCredential> signInWithGoogle() async {
+    InternetConnectionStatusClass.getInternetConnectionStatus();
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  //   // Obtain the auth details from the request
-  //   final GoogleSignInAuthentication googleAuth =
-  //       await googleUser!.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
 
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-
-  //   // Once signed in, return the UserCredential
-  //   return await FirebaseAuth.instance.signInWithCredential(credential);
-  // }
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    CircularProgressIndicator();
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 
   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
   //late User currentUser;
@@ -60,22 +62,26 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
+    InternetConnectionStatusClass.getInternetConnectionStatus();
     _auth.authStateChanges().listen((firebaseUser) async {
-      firebaseUser = _auth.currentUser;
+      // firebaseUser = _auth.currentUser;
       if (firebaseUser != null) {
         CircularProgressIndicator();
         DocumentSnapshot doc = await usersRef.doc(firebaseUser.uid).get();
         if (doc.exists) {
           doc = await usersRef.doc(firebaseUser.uid).get();
         }
-        currentUser = _auth.currentUser!;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfilePage(),
-          ),
-        );
+        try {
+          currentUser = _auth.currentUser!;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(),
+            ),
+          );
+        } catch (e) {
+          build(context);
+        }
       } else {
         build(context);
       }
@@ -329,6 +335,8 @@ class _LoginPageState extends State<LoginPage> {
                             ).withOpacity(0.7)),
                           ),
                           onPressed: () async {
+                            InternetConnectionStatusClass
+                                .getInternetConnectionStatus();
                             if (_emailFormKey.currentState!.validate() &&
                                 _passwordFormKey.currentState!.validate()) {
                               _emailFormKey.currentState!.save();
@@ -420,6 +428,24 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       )
                     ],
+                  ),
+                ),
+                SizedBox(
+                  //height: 30.0,
+                  width: 100.0,
+                  child: Divider(
+                    indent: 20.0,
+                    endIndent: 20.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Center(
+                  child: IconButton(
+                    onPressed: signInWithGoogle,
+                    icon: FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
                 ),
               ],

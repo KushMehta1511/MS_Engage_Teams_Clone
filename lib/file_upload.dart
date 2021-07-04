@@ -11,7 +11,9 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ms_teams_clone_engage/firebase_api.dart';
 import 'package:ms_teams_clone_engage/firebase_file.dart';
+import 'package:ms_teams_clone_engage/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/main.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -191,9 +193,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
       return AssetImage('assets/images/pdf_logo.png');
     } else if (extensions[extensions.length - 1] == 'docx') {
       return AssetImage('assets/images/word_logo.png');
-    } else {
-      return null;
+    } else if (extensions[extensions.length - 1] == 'mp4' ||
+        extensions[extensions.length - 1] == 'avi') {
+      return AssetImage('assets/images/video_logo.png');
     }
+    return null;
   }
 
   getDisplayName(String userDetail) {
@@ -296,8 +300,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
           // });
           return ListView(
             children: snapshot.data!.docs.map((document) {
-              String uid = document['uploader'];
-              String displayName = document['uploaderDisplayName'];
+              // String uid = document['uploader'];
+              // String displayName = document['uploaderDisplayName'];
               return Column(
                 children: [
                   Container(
@@ -317,6 +321,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
                       ),
                       // subtitle: Text(displayName),
                       onTap: () {
+                        InternetConnectionStatusClass
+                            .getInternetConnectionStatus();
                         _downloadFile(document);
                       },
                     ),
@@ -376,10 +382,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
         actions: [
           IconButton(
             onPressed: () {
+              InternetConnectionStatusClass.getInternetConnectionStatus();
               _auth.signOut();
               Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()));
             },
             icon: Icon(Icons.logout),
           ),
@@ -430,43 +437,52 @@ class _FileUploadPageState extends State<FileUploadPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        // onPressed: addFile(),
         onPressed: () async {
-          final result =
-              await FilePicker.platform.pickFiles(allowMultiple: false);
-          if (result == null) {
-            return;
+          InternetConnectionStatusClass.getInternetConnectionStatus();
+          try {
+            final result =
+                await FilePicker.platform.pickFiles(allowMultiple: false);
+            if (result == null) {
+              return;
+            }
+            final path = result.files.single.path!;
+            setState(() {
+              file = File(path);
+            });
+            if (file == null) {
+              return;
+            }
+            final fileName = basename(file!.path);
+            final destination =
+                'files/${widget.roomDetails}/${currentUser.uid}/$fileName';
+            task = FirebaseApi.uploadFile(destination, file!);
+            if (task == null) {
+              return;
+            }
+            final circularProgressIndicator = CircularProgressIndicator();
+            circularProgressIndicator.createElement();
+            final snapshot = await task!.whenComplete(() {
+              circularProgressIndicator;
+            });
+            final urlDownload = await snapshot.ref.getDownloadURL();
+            _files.doc(widget.roomDetails).collection('roomFiles').add({
+              'fileUrl': urlDownload,
+              'uploader': currentUser.uid,
+              // 'uploaderDisplayName': _auth.currentUser!.displayName,
+              'timestamp': DateTime.now(),
+              'filePath': 'files/${currentUser.uid}/$fileName',
+              'fileName': fileName,
+              'room': widget.roomDetails,
+            });
+            print('Download-link$urlDownload');
+          } catch (e) {
+            Fluttertoast.showToast(
+                msg: e.toString(),
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+                gravity: ToastGravity.BOTTOM,
+                toastLength: Toast.LENGTH_SHORT);
           }
-          final path = result.files.single.path!;
-          setState(() {
-            file = File(path);
-          });
-          if (file == null) {
-            return;
-          }
-          final fileName = basename(file!.path);
-          final destination =
-              'files/${widget.roomDetails}/${currentUser.uid}/$fileName';
-          task = FirebaseApi.uploadFile(destination, file!);
-          if (task == null) {
-            return;
-          }
-          final circularProgressIndicator = CircularProgressIndicator();
-          circularProgressIndicator.createElement();
-          final snapshot = await task!.whenComplete(() {
-            circularProgressIndicator;
-          });
-          final urlDownload = await snapshot.ref.getDownloadURL();
-          _files.doc(widget.roomDetails).collection('roomFiles').add({
-            'fileUrl': urlDownload,
-            'uploader': currentUser.uid,
-            'uploaderDisplayName': _auth.currentUser!.displayName,
-            'timestamp': DateTime.now(),
-            'filePath': 'files/${currentUser.uid}/$fileName',
-            'fileName': fileName,
-            'room': widget.roomDetails,
-          });
-          print('Download-link$urlDownload');
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: Icon(

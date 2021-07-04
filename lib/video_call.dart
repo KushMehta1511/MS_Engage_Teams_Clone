@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:ms_teams_clone_engage/chat_screen.dart';
 import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/main.dart';
 import 'package:ms_teams_clone_engage/my_themes.dart';
 
 class VideoCallScreen extends StatefulWidget {
@@ -19,12 +21,13 @@ class VideoCallScreen extends StatefulWidget {
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
   final _auth = FirebaseAuth.instance;
+  final _usersRef = FirebaseFirestore.instance.collection('users');
   final serverText = TextEditingController();
   final roomText = TextEditingController();
   late final roomTextValue = widget.roomDetails;
   final subjectText = TextEditingController();
   late var subjectTextValue = "";
-  final nameText = TextEditingController(text: currentUser.displayName);
+  late var nameText = TextEditingController(text: currentUser.displayName);
   late var nameTextValue = "";
   late final emailText = TextEditingController(text: loggedInUser.email);
   final iosAppBarRGBAColor =
@@ -45,6 +48,18 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         onConferenceJoined: _onConferenceJoined,
         onConferenceTerminated: _onConferenceTerminated,
         onError: _onError));
+
+    getDisplayName();
+  }
+
+  getDisplayName() async {
+    DocumentSnapshot doc = await _usersRef.doc(loggedInUser.uid).get();
+    if (doc.exists) {
+      setState(() {
+        nameText.text = doc.get('displayName');
+        print(doc.get('displayName'));
+      });
+    }
   }
 
   @override
@@ -77,7 +92,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 onPressed: () {
                   _auth.signOut();
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                      MaterialPageRoute(builder: (context) => MyApp()));
                 },
                 icon: Icon(Icons.logout))
           ],
@@ -175,6 +190,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   nameTextValue = value;
                 });
               },
+              // enabled: false,
               decoration: InputDecoration(
                 hintText: "Enter display name to be used in the video call",
                 border: OutlineInputBorder(),
@@ -218,11 +234,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           SizedBox(
             height: 14.0,
           ),
-          CheckboxListTile(
-            title: Text("Audio Only"),
-            value: isAudioOnly,
-            onChanged: _onAudioOnlyChanged,
-          ),
+          // CheckboxListTile(
+          //   title: Text("Audio Only"),
+          //   value: isAudioOnly,
+          //   onChanged: _onAudioOnlyChanged,
+          // ),
           SizedBox(
             height: 14.0,
           ),
@@ -315,7 +331,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     var options = JitsiMeetingOptions(room: roomTextValue)
       ..serverURL = serverUrl
       ..subject = subjectTextValue
-      ..userDisplayName = nameTextValue
+      ..userDisplayName = nameText.text
       ..userEmail = emailText.text
       ..iosAppBarRGBAColor = iosAppBarRGBAColor.text
       ..audioOnly = isAudioOnly
@@ -328,7 +344,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         "height": "100%",
         "enableWelcomePage": false,
         "chromeExtensionBanner": null,
-        "userInfo": {"displayName": nameTextValue}
+        "userInfo": {"displayName": nameText.value}
       };
 
     debugPrint("JitsiMeetingOptions: $options");
