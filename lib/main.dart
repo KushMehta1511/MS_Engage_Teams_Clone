@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:ms_teams_clone_engage/event_provider.dart';
-import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
+import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/my_themes.dart';
 import 'package:ms_teams_clone_engage/resources/firebase_repo.dart';
 import 'package:ms_teams_clone_engage/search_screen.dart';
@@ -28,10 +28,10 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: MyThemes.lightTheme,
         darkTheme: MyThemes.darkTheme,
-        initialRoute: '/',
-        routes: {
-          '/search_screen': (context) => SearchScreen(),
-        },
+        // initialRoute: '/',
+        // routes: {
+        //   '/search_screen': (context) => SearchScreen(),
+        // },
         // theme: ThemeData(
         //   primarySwatch: Colors.purple,
         //   accentColor: Colors.blue,
