@@ -30,7 +30,13 @@ class _CalendarClassState extends State<CalendarClass> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             print("no data");
-            return CircularProgressIndicator();
+            return Center(
+              child: SizedBox(
+                height: 75.0,
+                width: 75.0,
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
           final events = snapshot.data!.docs;
           final provider = Provider.of<EventProvider>(context, listen: false);
