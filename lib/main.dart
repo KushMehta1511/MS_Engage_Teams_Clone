@@ -4,7 +4,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/utilities/my_themes.dart';
-import 'package:ms_teams_clone_engage/unwanted/search_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
