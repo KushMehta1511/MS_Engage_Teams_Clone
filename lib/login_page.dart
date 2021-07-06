@@ -40,14 +40,29 @@ class _LoginPageState extends State<LoginPage> {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+
     CircularProgressIndicator();
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    final authCredential = await _auth.signInWithCredential(credential);
+    currentUser = authCredential.user!;
+    DocumentSnapshot doc = await usersRef.doc(currentUser.uid).get();
+    if (doc.exists) {
+      // currentUser = googleUser as User;
+      // currentUser = googleUser as User;
+    } else {
+      usersRef.doc(currentUser.uid).set({
+        'displayName': currentUser.displayName,
+        'email': currentUser.email,
+        'id': currentUser.uid,
+        'photoUrl': googleUser.photoUrl,
+        'timestamp': timestamp
+      });
+    }
+    return authCredential;
   }
 
   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
   //late User currentUser;
-
   final _auth = FirebaseAuth.instance;
   final _passwordFormKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();

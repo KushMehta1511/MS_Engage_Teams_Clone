@@ -153,14 +153,28 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (_displayNameValid) {
       if (!isFileNull) {
-        await _usersRef
-            .doc(currentUser.uid)
-            .update({
-              'displayName': editDisplayName,
-              "photoUrl": photoUrl,
-            })
-            .then((value) => print("User Updated"))
-            .catchError((error) => print("Failed to update user: $error"));
+        await _usersRef.doc(currentUser.uid).update({
+          'displayName': editDisplayName,
+          "photoUrl": photoUrl,
+        }).then((value) {
+          return Fluttertoast.showToast(
+              msg: "Profile Updated",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black87,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }).catchError((error) {
+          return Fluttertoast.showToast(
+              msg: "Could Not Update Details, Maybe User has been Deleted",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black87,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        });
       } else {
         await _usersRef.doc(currentUser.uid).update({
           'displayName': editDisplayName,
