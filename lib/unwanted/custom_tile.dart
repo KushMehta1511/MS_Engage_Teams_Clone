@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ms_teams_clone_engage/universal_variables.dart';
+import 'package:ms_teams_clone_engage/utilities/universal_variables.dart';
 
 class CustomTile extends StatelessWidget {
   final Widget leading;

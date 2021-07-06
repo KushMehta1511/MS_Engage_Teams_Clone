@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ms_teams_clone_engage/calendar_event_editing_page.dart';
-import 'package:ms_teams_clone_engage/calendar_widget.dart';
-import 'package:ms_teams_clone_engage/event.dart';
-import 'package:ms_teams_clone_engage/event_provider.dart';
-import 'package:ms_teams_clone_engage/login_page.dart';
+import 'package:ms_teams_clone_engage/calendar/calendar_event_editing_page.dart';
+import 'package:ms_teams_clone_engage/calendar/calendar_widget.dart';
+import 'package:ms_teams_clone_engage/calendar/event.dart';
+import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
+import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';

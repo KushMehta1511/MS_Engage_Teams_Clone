@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ms_teams_clone_engage/event.dart';
+import 'package:ms_teams_clone_engage/calendar/event.dart';
 
 class EventProvider extends ChangeNotifier {
   final List<Event> _events = [];

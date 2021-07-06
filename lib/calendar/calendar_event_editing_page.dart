@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ms_teams_clone_engage/event.dart';
-import 'package:ms_teams_clone_engage/event_provider.dart';
+import 'package:ms_teams_clone_engage/calendar/event.dart';
+import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:provider/provider.dart';
 
 class EventEditingPage extends StatefulWidget {

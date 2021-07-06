@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ms_teams_clone_engage/event.dart';
+import 'package:ms_teams_clone_engage/calendar/event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventDataSource extends CalendarDataSource {

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ms_teams_clone_engage/chat_screen.dart';
-import 'package:ms_teams_clone_engage/internet_connection_status.dart';
-import 'package:ms_teams_clone_engage/logged_user.dart';
-import 'package:ms_teams_clone_engage/login_page.dart';
-import 'package:ms_teams_clone_engage/profile_page.dart';
-import 'package:ms_teams_clone_engage/welcome_page.dart';
+import 'package:ms_teams_clone_engage/chat/chat_screen.dart';
+import 'package:ms_teams_clone_engage/utilities/internet_connection_status.dart';
+import 'package:ms_teams_clone_engage/unwanted/logged_user.dart';
+import 'package:ms_teams_clone_engage/authentication/login_page.dart';
+import 'package:ms_teams_clone_engage/profile/profile_page.dart';
+import 'package:ms_teams_clone_engage/unwanted/welcome_page.dart';
 
 final _roomFirestore = FirebaseFirestore.instance.collection('room');
 
