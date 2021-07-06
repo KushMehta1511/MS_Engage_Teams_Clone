@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ms_teams_clone_engage/chat_screen.dart';
-import 'package:ms_teams_clone_engage/internet_connection_status.dart';
-import 'package:ms_teams_clone_engage/logged_user.dart';
-import 'package:ms_teams_clone_engage/profile_page.dart';
-import 'package:ms_teams_clone_engage/resources/firebase_repo.dart';
-import 'package:ms_teams_clone_engage/signup_page.dart';
+import 'package:ms_teams_clone_engage/chat/chat_screen.dart';
+import 'package:ms_teams_clone_engage/utilities/internet_connection_status.dart';
+import 'package:ms_teams_clone_engage/profile/profile_page.dart';
+import 'package:ms_teams_clone_engage/authentication/signup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ms_teams_clone_engage/welcome_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ms_teams_clone_engage/event_data_source.dart';
-import 'package:ms_teams_clone_engage/event_provider.dart';
+import 'package:ms_teams_clone_engage/calendar/event_data_source.dart';
+import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
