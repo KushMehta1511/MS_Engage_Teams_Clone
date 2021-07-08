@@ -6,6 +6,7 @@ import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/utilities/my_themes.dart';
 import 'package:provider/provider.dart';
 
+//main function
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
@@ -13,8 +14,8 @@ void main() async {
   runApp(MyApp());
 }
 
+//Initialing and creating the Material app
 class MyApp extends StatelessWidget {
-  // FireBaseRepository _fireBaseRepository = FireBaseRepository();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -23,17 +24,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Team Clone',
         debugShowCheckedModeBanner: false,
+        //Takes in system theme
         themeMode: ThemeMode.system,
         theme: MyThemes.lightTheme,
         darkTheme: MyThemes.darkTheme,
-        // initialRoute: '/',
-        // routes: {
-        //   '/search_screen': (context) => SearchScreen(),
-        // },
-        // theme: ThemeData(
-        //   primarySwatch: Colors.purple,
-        //   accentColor: Colors.blue,
-        // ),
+        //Routing to Home page which opens upon app startup
         home: LoginPage(),
       ),
     );

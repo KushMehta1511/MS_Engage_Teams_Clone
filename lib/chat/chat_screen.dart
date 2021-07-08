@@ -17,6 +17,7 @@ late User loggedInUser;
 
 enum optionsMenu { email, call, message, signout }
 
+//Chat screen stateful widget
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen_demo';
   final String roomDetails;
@@ -53,10 +54,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-
+    //Getting details of logged in user
     getCurrentUser();
   }
 
+  //Function to get user details
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
@@ -69,6 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  //Function to get display name of the user
   void getDisplayName() async {
     DocumentSnapshot doc = await _usersRef.doc(loggedInUser.uid).get();
     if (!doc.exists) {
@@ -91,6 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  //Function to get text for display picture placeholder
   getBackgroundText() {
     if (isFileNull) {
       if (photoUrl == "") {
@@ -124,6 +128,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  //Function to get photoUrl from the user credentials
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
@@ -140,12 +145,14 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  //function to signout
   signout() {
     _auth.signOut();
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
   }
 
+  //Validating email address
   String? validateEmailAddress(String? username) {
     bool emailValid = false;
     if (username != null) {
@@ -160,6 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  //Function to ask for email address details and direct to mail sending app e.g Gmail
   sendEmail() {
     return showDialog<void>(
       context: context,
@@ -215,6 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  //Function to ask for phone details and direct to calling app
   makeCall() {
     return showDialog<void>(
       context: context,
@@ -268,6 +277,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  //Function to ask for phone details and direct to sms app
   sendMessage() {
     return showDialog<void>(
       context: context,
@@ -321,6 +331,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  //Function to generate random colors for display picture placeholder
   Color getBackgroundColor() {
     List<Color> colors = [];
     colors.add(Colors.blue);
@@ -334,6 +345,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return colors[nextInd];
   }
 
+  //Building chat screen UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -357,6 +369,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: <Widget>[
+          //Button to go to file uploading page
           IconButton(
             onPressed: () {
               InternetConnectionStatusClass.getInternetConnectionStatus();
@@ -371,6 +384,7 @@ class _ChatScreenState extends State<ChatScreen> {
             },
             icon: Icon(Icons.attach_file),
           ),
+          //Button to go to video calling page
           IconButton(
               onPressed: () {
                 InternetConnectionStatusClass.getInternetConnectionStatus();
@@ -384,6 +398,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               },
               icon: Icon(Icons.video_call)),
+          //Popup menu button for mailing, calling and sms
           PopupMenuButton<optionsMenu>(
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) =>
@@ -437,6 +452,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: SafeArea(
+        //Chat layout
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -477,6 +493,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           )),
                     ),
                   ),
+                  //Send button
                   TextButton(
                     onPressed: () {
                       InternetConnectionStatusClass
@@ -484,6 +501,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       messageTextController.clear();
                       try {
                         if (messageText != "") {
+                          //Storing the messages and details in firebase firestore
                           _firestore
                               .doc(widget.roomDetails)
                               .collection('messages')
@@ -527,6 +545,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
+//Generating message stream for the particular room
 class MessagesStream extends StatelessWidget {
   final String roomDetails;
   final String userDisplayName;
@@ -540,6 +559,7 @@ class MessagesStream extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    //Stream builder to fetch stream of messages and display in list view
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore
           .doc(roomDetails)
@@ -572,6 +592,7 @@ class MessagesStream extends StatelessWidget {
 
           messageBubbles.add(messageBubble);
         }
+        //List view for messages
         return Expanded(
           child: ListView(
             reverse: true,
@@ -584,6 +605,7 @@ class MessagesStream extends StatelessWidget {
   }
 }
 
+//Creating the message bubble for current user message and other user messages
 class MessageBubble extends StatelessWidget {
   MessageBubble({
     required this.sender,

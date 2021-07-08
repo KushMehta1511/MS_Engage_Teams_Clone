@@ -9,6 +9,7 @@ import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
 import 'package:provider/provider.dart';
 
+//CalendarClass stateful widget
 class CalendarClass extends StatefulWidget {
   const CalendarClass({Key? key}) : super(key: key);
 
@@ -23,6 +24,7 @@ class _CalendarClassState extends State<CalendarClass> {
       .doc(currentUser.uid)
       .collection('events');
 
+  //Function to build a stream for the events of the current user to be displayed
   getEvents() {
     return StreamBuilder(
         stream: _calendarRef.snapshots(),
@@ -38,6 +40,7 @@ class _CalendarClassState extends State<CalendarClass> {
             );
           }
           final events = snapshot.data!.docs;
+          //Storing the events in the provider to dispay
           final provider = Provider.of<EventProvider>(context, listen: false);
           for (var event in events) {
             final title = event.get('title');
@@ -64,6 +67,7 @@ class _CalendarClassState extends State<CalendarClass> {
     });
   }
 
+  //Building calendar class UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +87,7 @@ class _CalendarClassState extends State<CalendarClass> {
         ],
       ),
       body: getEvents(),
+      //button to add a new event
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {

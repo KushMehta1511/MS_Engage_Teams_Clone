@@ -8,7 +8,9 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:ms_teams_clone_engage/chat/chat_screen.dart';
 import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
+import 'package:ms_teams_clone_engage/utilities/my_themes.dart';
 
+//Video Call page Stateful Widget
 class VideoCallScreen extends StatefulWidget {
   final String roomDetails;
   const VideoCallScreen({Key? key, required this.roomDetails})
@@ -42,15 +44,18 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void initState() {
     super.initState();
+    //Initialising Jitsi meeting
     JitsiMeet.addListener(JitsiMeetingListener(
         onConferenceWillJoin: _onConferenceWillJoin,
         onConferenceJoined: _onConferenceJoined,
         onConferenceTerminated: _onConferenceTerminated,
         onError: _onError));
 
+    //getting display name of the currentuser
     getDisplayName();
   }
 
+  //Function to get the display name of the current user
   getDisplayName() async {
     DocumentSnapshot doc = await _usersRef.doc(loggedInUser.uid).get();
     if (doc.exists) {
@@ -61,20 +66,22 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
   }
 
+  //Disposing off jitsi meeting
   @override
   void dispose() {
     super.dispose();
     JitsiMeet.removeAllListeners();
   }
 
+  //Building VideoCall page UI
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // themeMode: ThemeMode.system,
-      // theme: MyThemes.lightTheme,
-      // darkTheme: MyThemes.darkTheme,
+      themeMode: ThemeMode.system,
+      theme: MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: MaterialStateColor.resolveWith(
@@ -134,6 +141,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  //Setting up meeting configuration by asking for meeting subject, displayname and email address
   Widget meetConfig() {
     return SingleChildScrollView(
       child: Column(
@@ -142,6 +150,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             height: 16.0,
           ),
           Form(
+            //Room details text field
             key: _roomFormKey,
             child: TextFormField(
               initialValue: widget.roomDetails,
@@ -159,6 +168,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             height: 14.0,
           ),
           Form(
+            //Subject Details text field
             key: _subjectFormKey,
             child: TextFormField(
               controller: subjectText,
@@ -181,6 +191,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             height: 14.0,
           ),
           Form(
+            //Name details Text field
             key: _nameFormKey,
             child: TextFormField(
               controller: nameText,
@@ -189,7 +200,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   nameTextValue = value;
                 });
               },
-              // enabled: false,
               decoration: InputDecoration(
                 hintText: "Enter display name to be used in the video call",
                 border: OutlineInputBorder(),
@@ -204,6 +214,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             height: 14.0,
           ),
           Form(
+            //Email details text field
             key: _emailFormKey,
             child: TextFormField(
               controller: emailText,
@@ -233,14 +244,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           SizedBox(
             height: 14.0,
           ),
-          // CheckboxListTile(
-          //   title: Text("Audio Only"),
-          //   value: isAudioOnly,
-          //   onChanged: _onAudioOnlyChanged,
-          // ),
           SizedBox(
             height: 14.0,
           ),
+          //Checkbox for audio on and off
           CheckboxListTile(
             title: Text("Audio Muted"),
             value: isAudioMuted,
@@ -249,6 +256,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           SizedBox(
             height: 14.0,
           ),
+          //Checkbox for video on and off
           CheckboxListTile(
             title: Text("Video Muted"),
             value: isVideoMuted,
@@ -258,6 +266,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             height: 48.0,
             thickness: 2.0,
           ),
+          //Button to initiate and join meeting
           SizedBox(
             height: 64.0,
             width: double.maxFinite,
@@ -277,7 +286,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateColor.resolveWith(
                     (states) => Theme.of(context).accentColor),
-                //backgroundColor: Theme.of(context).accentColor,
               ),
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:ms_teams_clone_engage/calendar/event.dart';
 import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:provider/provider.dart';
 
+//Calendar Event editing page stateful widget
 class EventEditingPage extends StatefulWidget {
   final Event? event;
   const EventEditingPage({Key? key, this.event}) : super(key: key);
@@ -24,12 +25,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //Getting the date and time
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(Duration(hours: 1));
     }
   }
 
+  //Function to create an event and save it
   List<Widget> buildEditingActions() {
     return [
       ElevatedButton.icon(
@@ -44,6 +47,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     ];
   }
 
+  //Function to create event title
   Widget buildTitle() {
     return TextFormField(
       style: TextStyle(fontSize: 24),
@@ -57,16 +61,19 @@ class _EventEditingPageState extends State<EventEditingPage> {
     );
   }
 
+  //Function to get event "to" date
   String getToDate(DateTime dateTime) {
     final date = DateFormat.yMMMEd().format(dateTime);
     return '$date';
   }
 
+  //Funtion to get event "to" time
   String getToTime(DateTime dateTime) {
     final time = DateFormat.Hm().format(dateTime);
     return '$time';
   }
 
+  //Function to create dropdown field for date and time
   Widget buildDropDownField({
     required String text,
     required VoidCallback onClicked,
@@ -91,6 +98,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     );
   }
 
+  //Function to set date and time from date and time pickers
   Future<DateTime?> pickDateTime(
     DateTime initialDate, {
     required bool pickDate,
@@ -135,6 +143,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     });
   }
 
+  //Function to build "from" date and time
   Widget buildFrom() {
     return buildHeader(
       header: 'FROM',
@@ -169,6 +178,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     });
   }
 
+  //Function to build "to" date and time
   Widget buildTo() {
     return buildHeader(
       header: 'TO',
@@ -192,10 +202,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
     );
   }
 
+  //Function that calls buildFrom and buildTo
   Widget buildDateTimePickers() {
     return Column(children: [buildFrom(), buildTo()]);
   }
 
+  //Function to save the event in the database and the evetn provider
   Future saveForm() async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
@@ -221,6 +233,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
     }
   }
 
+  //Building calendar event class UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(

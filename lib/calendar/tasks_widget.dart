@@ -4,6 +4,7 @@ import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+//Tasks Widget stateful widget
 class TasksWidget extends StatefulWidget {
   const TasksWidget({Key? key}) : super(key: key);
 
@@ -12,6 +13,7 @@ class TasksWidget extends StatefulWidget {
 }
 
 class _TasksWidgetState extends State<TasksWidget> {
+  //Function to build the UI for the particular event
   Widget appointmentBuilder(
       BuildContext context, CalendarAppointmentDetails details) {
     final event = details.appointments.first;
@@ -35,6 +37,7 @@ class _TasksWidgetState extends State<TasksWidget> {
     );
   }
 
+  //Building the events UI
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EventProvider>(context);
