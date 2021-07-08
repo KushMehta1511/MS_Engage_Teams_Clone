@@ -8,7 +8,6 @@ import 'package:ms_teams_clone_engage/calendar/event_provider.dart';
 import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarClass extends StatefulWidget {
   const CalendarClass({Key? key}) : super(key: key);
