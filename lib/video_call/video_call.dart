@@ -8,7 +8,6 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:ms_teams_clone_engage/chat/chat_screen.dart';
 import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
-import 'package:ms_teams_clone_engage/utilities/my_themes.dart';
 
 class VideoCallScreen extends StatefulWidget {
   final String roomDetails;
