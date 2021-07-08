@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+//Class to check for internet status
 class InternetConnectionStatusClass {
+  //function to check for internet staus before performing any backend operation
   static getInternetConnectionStatus() async {
     try {
       final result = await InternetAddress.lookup('example.com');

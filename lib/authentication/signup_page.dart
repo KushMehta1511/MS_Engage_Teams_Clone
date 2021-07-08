@@ -9,6 +9,7 @@ import 'package:ms_teams_clone_engage/profile/profile_page.dart';
 
 final _roomFirestore = FirebaseFirestore.instance.collection('room');
 
+//Sign Up Page Stateful Widget
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
 
@@ -31,6 +32,7 @@ class _CreateAccountState extends State<CreateAccount> {
       new TextEditingController();
   late String roomDetails = "EmptyRoom";
 
+  //Validating Email Address
   String? validateEmailAddress(String? username) {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -42,6 +44,7 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+  // Validating Password
   String? validatePassword(String? password) {
     if (password!.trim().length < 6 || password.isEmpty) {
       return 'Password must be greater than 6 characters';
@@ -50,6 +53,7 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+  //Validating Display name
   String? validateDisplayName(String? displayName) {
     if (displayName!.trim().length < 3) {
       return 'Name is too short';
@@ -60,62 +64,7 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
-  Future<void> chatOptionDialog() {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Room Details'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Form(
-                  key: _roomFormKey,
-                  child: TextFormField(
-                    controller: detailsTextEditingController,
-                    autofocus: true,
-                    validator: (value) {
-                      bool roomValid = false;
-                      if (value != null) {
-                        roomValid = value.length > 3 ? true : false;
-                      }
-                      if (!roomValid) {
-                        return 'Room Name should be greater than 3';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onChanged: (data) {
-                      setState(() {
-                        roomDetails = data;
-                      });
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (_roomFormKey.currentState!.validate()) {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                              roomDetails: roomDetails,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: Text("Enter Room")),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
+  //Building Sign up page UI
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -166,7 +115,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       top: 10.0, bottom: 10.0, right: 20.0, left: 20.0),
                   child: Form(
                     key: _emailFormKey,
-//                    autovalidate: true,
+                    //Email text field
                     child: TextFormField(
                       onSaved: (newValue) => email = newValue!,
                       decoration: InputDecoration(
@@ -196,6 +145,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   child: Form(
                     key: _passwordFormKey,
                     child: TextFormField(
+                      //Password Text field
                       onSaved: (newValue) => password = newValue!,
                       decoration: InputDecoration(
                         prefixIcon: Icon(
@@ -227,7 +177,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       top: 10.0, bottom: 10.0, right: 20.0, left: 20.0),
                   child: Form(
                     key: _displayNameFormKey,
-//                    autovalidate: true,
+                    //DIsplayName text field
                     child: TextFormField(
                       onSaved: (newValue) => displayName = newValue!,
                       decoration: InputDecoration(
@@ -256,12 +206,14 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                   ),
                 ),
+                //Sign up and login button
                 Padding(
                   padding: EdgeInsets.only(
                       top: 10.0, bottom: 10.0, right: 20.0, left: 90.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      //Signup Button
                       ButtonTheme(
                         minWidth: 200.0,
                         height: 40.0,
@@ -281,11 +233,12 @@ class _CreateAccountState extends State<CreateAccount> {
                               _emailFormKey.currentState!.save();
                               _passwordFormKey.currentState!.save();
                               _displayNameFormKey.currentState!.save();
-                              print("login user");
-                              print("Email$email");
-                              print("Displayname$displayName");
-                              print("Password$password");
+                              // print("login user");
+                              // print("Email$email");
+                              // print("Displayname$displayName");
+                              // print("Password$password");
                               try {
+                                //Creating a new user and storing in firebasefirestore
                                 final newUser =
                                     await _auth.createUserWithEmailAndPassword(
                                         email: email.trim(),
@@ -342,6 +295,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                         ),
                       ),
+                      //Login button
                       GestureDetector(
                         onTap: () => Navigator.pushReplacement(
                             context,

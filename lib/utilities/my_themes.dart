@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Setting up theme provider to detect syste theme and change UI components accordingly
 class ThemeProvider extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.dark;
   bool get isDarkMode => themeMode == ThemeMode.dark;

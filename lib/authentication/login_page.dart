@@ -9,6 +9,7 @@ import 'package:ms_teams_clone_engage/profile/profile_page.dart';
 import 'package:ms_teams_clone_engage/authentication/signup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+//Login Page stateful Widget
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -22,6 +23,7 @@ final CollectionReference _roomFirestore =
     FirebaseFirestore.instance.collection('room');
 
 class _LoginPageState extends State<LoginPage> {
+  //Google Sign In
   Future<UserCredential> signInWithGoogle() async {
     InternetConnectionStatusClass.getInternetConnectionStatus();
     // Trigger the authentication flow
@@ -41,10 +43,9 @@ class _LoginPageState extends State<LoginPage> {
     // Once signed in, return the UserCredential
     final authCredential = await _auth.signInWithCredential(credential);
     currentUser = authCredential.user!;
+    //Creating user in firebase firestore if not exists
     DocumentSnapshot doc = await usersRef.doc(currentUser.uid).get();
     if (doc.exists) {
-      // currentUser = googleUser as User;
-      // currentUser = googleUser as User;
     } else {
       usersRef.doc(currentUser.uid).set({
         'displayName': currentUser.displayName,
@@ -58,7 +59,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
-  //late User currentUser;
   final _auth = FirebaseAuth.instance;
   final _passwordFormKey = GlobalKey<FormState>();
   final _emailFormKey = GlobalKey<FormState>();
@@ -74,6 +74,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     InternetConnectionStatusClass.getInternetConnectionStatus();
+
+    //Auto Login
     _auth.authStateChanges().listen((firebaseUser) async {
       // firebaseUser = _auth.currentUser;
       if (firebaseUser != null) {
@@ -99,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  //Validating email address
   String? validateEmailAddress(String? username) {
     bool emailValid = false;
     if (username != null) {
@@ -113,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  //Validating Password
   String? validatePassword(String? password) {
     if (password != null && password.trim().length < 6 ||
         password != null && password.isEmpty) {
@@ -122,93 +126,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> chatOptionDialog() {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Room Details'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Form(
-                  key: _roomFormKey,
-                  child: TextFormField(
-                      controller: detailsTextEditingController,
-                      autofocus: true,
-                      validator: (String? value) {
-                        bool roomValid = false;
-                        if (value != null) {
-                          roomValid = value.length > 3 ? true : false;
-                        }
-                        if (!roomValid) {
-                          return 'Room Name should be greater than 3';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (data) {
-                        roomDetails = data;
-                      }),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (_roomFormKey.currentState!.validate()) {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                              roomDetails: roomDetails,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: Text("Enter Room")),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // void googleSignIn() {
-  //   _fireBaseRepository.signInWithGoogle().then((UserCredential user) {
-  //     if (user != null) {
-  //       createUserInFirestore();
-  //     } else {
-  //       print("Error in signing");
-  //     }
-  //   });
-  // }
-
-  // signInWithGoogle() async {
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //   final GoogleSignInAuthentication googleSignInAuthentication =
-  //       await googleUser!.authentication;
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleSignInAuthentication.accessToken,
-  //     idToken: googleSignInAuthentication.idToken,
-  //   );
-  //   DocumentSnapshot doc =
-  //       await usersRef.doc(googleUser.hashCode.toString()).get();
-  //   if (!doc.exists) {
-  //     usersRef.add({
-  //       "id": googleUser.hashCode,
-  //       //"username": username,
-  //       "photoUrl": googleUser.photoUrl,
-  //       "email": googleUser.email,
-  //       "displayName": googleUser.displayName,
-  //       "timestamp": timestamp,
-  //     });
-  //   }
-  //   currentUser = LoggedUser.fromDocument(doc);
-  //   chatOptionDialog();
-  // }
-
+  //Building the login page UI
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -237,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                       top: 10.0, bottom: 10.0, right: 20.0, left: 20.0),
                   child: Form(
                     key: _emailFormKey,
-//                    autovalidate: true,
+                    //Email address text field
                     child: TextFormField(
                       onSaved: (String? value) => username = value!,
                       decoration: InputDecoration(
@@ -257,7 +175,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         hintText: 'Enter Email address',
                       ),
-//                      autovalidate: true,
                       validator: (value) {
                         bool emailValid = false;
                         if (value != null) {
@@ -271,9 +188,6 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         }
                       },
-                      // style: TextStyle(
-                      //   color: Color(0xFF003D66),
-                      // ),
                     ),
                   ),
                 ),
@@ -282,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                       top: 10.0, bottom: 10.0, right: 20.0, left: 20.0),
                   child: Form(
                     key: _passwordFormKey,
-//                    autovalidate: true,
+                    //Passwor Text Field
                     child: TextFormField(
                       onSaved: (String? value) {
                         password = value!;
@@ -307,7 +221,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         hintText: 'Enter Password',
                       ),
-//                      autovalidate: true,
                       validator: (value) {
                         if (value != null && value.trim().length < 6 ||
                             value != null && value.isEmpty) {
@@ -316,19 +229,18 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         }
                       },
-                      // style: TextStyle(
-                      //   color: Color(0xFF003D66),
-                      // ),
                       obscureText: true,
                     ),
                   ),
                 ),
+                //Login and Signup buttons
                 Padding(
                   padding: EdgeInsets.only(
                       top: 10.0, bottom: 10.0, right: 20.0, left: 90.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      //Login Button
                       ButtonTheme(
                         minWidth: 200.0,
                         height: 40.0,
@@ -337,9 +249,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            // backgroundColor: MaterialStateProperty.all<Color>(
-                            //   Theme.of(context).primaryColor.withOpacity(0.7),
-                            // ),
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Color(
                               0xFF534DD6,
@@ -352,9 +261,9 @@ class _LoginPageState extends State<LoginPage> {
                                 _passwordFormKey.currentState!.validate()) {
                               _emailFormKey.currentState!.save();
                               _passwordFormKey.currentState!.save();
-                              print("login user");
-                              print("Username$username");
-                              print("Password$password");
+                              // print("login user");
+                              // print("Username$username");
+                              // print("Password$password");
 
                               try {
                                 final user =
@@ -371,7 +280,6 @@ class _LoginPageState extends State<LoginPage> {
                                         .get();
                                   }
                                   currentUser = (await _auth.currentUser)!;
-                                  // chatOptionDialog();
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -420,6 +328,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
+                      //Signup Button
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
@@ -442,7 +351,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  //height: 30.0,
                   width: 100.0,
                   child: Divider(
                     indent: 20.0,
@@ -450,6 +358,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context).primaryColor,
                   ),
                 ),
+                //Google Sign Up button
                 Center(
                   child: IconButton(
                     onPressed: signInWithGoogle,

@@ -8,6 +8,7 @@ import 'package:ms_teams_clone_engage/chat/chat_screen.dart';
 import 'package:ms_teams_clone_engage/utilities/internet_connection_status.dart';
 import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 
+//Dashboard class stateful widget
 class DashboardClass extends StatefulWidget {
   const DashboardClass({Key? key}) : super(key: key);
 
@@ -26,6 +27,7 @@ class _DashboardClassState extends State<DashboardClass> {
   final _roomDetailsKey = GlobalKey<FormState>();
   var roomDetails = "room";
 
+  //Generating random colors for display picture background
   Color getBackgroundColor() {
     List<Color> colors = [];
     colors.add(Colors.blue);
@@ -50,6 +52,7 @@ class _DashboardClassState extends State<DashboardClass> {
     }
   }
 
+  //Stream builder to generate all meetings the user is present in and displaying in list view
   buildRooms() {
     return StreamBuilder(
         stream: _dashboardRef.snapshots(),
@@ -114,8 +117,10 @@ class _DashboardClassState extends State<DashboardClass> {
         });
   }
 
+  //Function to create a new room
   onPressed() {
     InternetConnectionStatusClass.getInternetConnectionStatus();
+    //Creating a dialog box to ask for room details
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -151,13 +156,6 @@ class _DashboardClassState extends State<DashboardClass> {
                 ElevatedButton(
                     onPressed: () async {
                       if (_roomDetailsKey.currentState!.validate()) {
-                        // final url = 'sms:$smsMobileNumberDetails';
-                        // if (await canLaunch(url)) {
-                        //   await launch(url);
-                        // } else {
-                        //   throw 'Could Not Call $url';
-                        // }
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -176,6 +174,7 @@ class _DashboardClassState extends State<DashboardClass> {
     );
   }
 
+  //Builing Dashboard page UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,6 +186,7 @@ class _DashboardClassState extends State<DashboardClass> {
       body: Container(
         child: buildRooms(),
       ),
+      //Floating button to add a new room
       floatingActionButton: FloatingActionButton(
         onPressed: onPressed,
         backgroundColor: Theme.of(context).primaryColor,

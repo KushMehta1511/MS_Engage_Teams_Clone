@@ -20,6 +20,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 final _files = FirebaseFirestore.instance.collection('files');
 
+//File upload page stateful widget
 class FileUploadPage extends StatefulWidget {
   final String roomDetails;
 
@@ -35,15 +36,12 @@ class _FileUploadPageState extends State<FileUploadPage> {
   final _usersRef = FirebaseFirestore.instance.collection('users');
   UploadTask? task;
   late File? file = File('file.txt');
-  // late Future<List<FirebaseFile>?> futureFiles;
-// var fileName = file != null ? basename(file!.path) : 'No File Uploaded';
   ReceivePort receivePort = ReceivePort();
   int progress = 0;
   @override
   void initState() {
     super.initState();
-    // futureFiles = FirebaseApi.listAll('files/${widget.roomDetails}');
-    // futureFiles = FirebaseApi.listAll(widget.roomDetails);
+    //Setting up ports and permission for file downloading
     IsolateNameServer.registerPortWithName(
         receivePort.sendPort, "Downloading File");
     receivePort.listen((message) {
@@ -52,14 +50,16 @@ class _FileUploadPageState extends State<FileUploadPage> {
       });
     });
     FlutterDownloader.registerCallback(downloadCallback);
-    print(widget.roomDetails);
+    // print(widget.roomDetails);
   }
 
+  //Flutter downloader callback
   static downloadCallback(id, status, progress) {
     SendPort? sendPort = IsolateNameServer.lookupPortByName("Downloading File");
     sendPort!.send(progress);
   }
 
+  //Function to select file to upload from internal storage
   selectFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) {
@@ -71,6 +71,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
     });
   }
 
+  //Function to upload selected file to firebase firestore by calling the upload function of FirebaseApi class
   uploadFile() async {
     if (file == null) {
       return;
@@ -80,109 +81,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
     FirebaseApi.uploadFile(destination, file!);
   }
 
-  // addFile() {
-  //   return showDialog<void>(
-  //     context: context as BuildContext,
-  //     barrierDismissible: true, // user must tap button!
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Upload File'),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: <Widget>[
-  //               ElevatedButton(
-  //                 onPressed: selectFile,
-  //                 child: Row(
-  //                   mainAxisSize: MainAxisSize.max,
-  //                   children: <Widget>[
-  //                     Icon(Icons.attach_file),
-  //                     Text('Select File'),
-  //                   ],
-  //                 ),
-  //               ),
-  //               // Text(fileName),
-  //               ElevatedButton(
-  //                 onPressed: uploadFile,
-  //                 child: Row(
-  //                   mainAxisSize: MainAxisSize.max,
-  //                   children: <Widget>[
-  //                     Icon(Icons.cloud_upload),
-  //                     Text('Upload File'),
-  //                   ],
-  //                 ),
-  //                 // onPressed: () async {
-  //                 //   if (_callDetailFormKey.currentState!.validate()) {
-  //                 //     final url = 'tel:$mobileNumberDetails';
-  //                 //     if (await canLaunch(url)) {
-  //                 //       await launch(url);
-  //                 //     } else {
-  //                 //       throw 'Could Not Call $url';
-  //                 //     }
-  //                 //   }
-  //                 // },
-  //                 // child: Text("Make a call")
-  //               ),
-  //               Text('0% uploaded')
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  getBackgroundText(String userDetail) {
-    String photoUrl = "";
-    String displayName = "";
-    //print(userDetail);
-    _usersRef.where('id', isEqualTo: userDetail).get().then((value) {
-      value.docs.forEach((element) {
-        //print(element['photoUrl']);
-        setState(() {
-          photoUrl = element['photoUrl'];
-          displayName = element['displayName'];
-        });
-      });
-      // print(photoUrl);
-      // print(displayName);
-    });
-
-    if (photoUrl == "") {
-      return Text(
-        displayName,
-      );
-    } else {
-      return null;
-    }
-  }
-
-  String splitDisplayName(String displayName) {
-    List<String> userNameSplit = displayName.split(' ');
-    if (userNameSplit.length > 1) {
-      return userNameSplit[0][0].toUpperCase() +
-          " " +
-          userNameSplit[userNameSplit.length - 1][0].toUpperCase();
-    } else {
-      return userNameSplit[0][0].toUpperCase();
-    }
-  }
-
-  // getPhotoUrl(String userDetail) {
-  //   String photoUrl = "";
-  //   _usersRef.where('id', isEqualTo: userDetail).get().then((value) {
-  //     value.docs.forEach((element) {
-  //       setState(() {
-  //         photoUrl = element['photoUrl'];
-  //       });
-  //     });
-  //   });
-  //   if (photoUrl == "") {
-  //     return null;
-  //   } else {
-  //     return NetworkImage(photoUrl);
-  //   }
-  // }
-
+  //Function to generate file type logo for specific files
   getPhotoUrl(String fileName) {
     List<String> extensions = fileName.split('.');
     if (extensions[extensions.length - 1] == 'jpeg' ||
@@ -199,18 +98,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
     return null;
   }
 
-  getDisplayName(String userDetail) {
-    String displayName = "";
-    _usersRef.where('id', isEqualTo: userDetail).get().then((value) {
-      value.docs.forEach((element) {
-        setState(() {
-          displayName = element['displayName'];
-        });
-      });
-    });
-    return displayName;
-  }
-
+  //Function to ask permission, download file and save to external storage directory
   _downloadFile(QueryDocumentSnapshot documentSnapshot) async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
@@ -233,46 +121,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
     }
   }
 
-  // buildFile() {
-  //   return ListTile(
-  //     leading: CircleAvatar(
-  //       backgroundColor: Colors.grey,
-  //       child: getBackgroundText(file.userDetail),
-  //       backgroundImage: getPhotoUrl(file.userDetail),
-  //     ),
-  //     title: Text(
-  //       file.name,
-  //       style: TextStyle(
-  //           fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-  //     ),
-  //     subtitle: Text(getDisplayName(file.userDetail)),
-  //     onTap: _downloadFile(file),
-  //   );
-  // }
-
-  // buildFile() {
-  //   // DocumentSnapshot doc = await _files.doc().get();
-  //   // if (!doc.exists) {
-  //   //   return CircularProgressIndicator();
-  //   // }
-  //   List<FirebaseFile> file = [];
-  //   String room = "";
-  //   _files.where('room', isEqualTo: widget.roomDetails).get().then((value) {
-  //     value.docs.forEach((element) {
-  //       setState(() {
-  //         room = element['room'];
-  //       });
-  //       // print(room + "Hello");
-  //       // print(FirebaseFile.fromDocument(element).room);
-  //       file.add(FirebaseFile.fromDocument(element));
-  //     });
-  //   });
-  //   // print(file.length);
-  //   return ListView(
-  //     children: file,
-  //   );
-  // }
-
+  //Stream builder to create a stream for files and display them in list view
   buildFile() {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -292,15 +141,9 @@ class _FileUploadPageState extends State<FileUploadPage> {
               ),
             );
           }
-          // List<FirebaseFile> files = [];
-          // snapshot.data!.docs.map((DocumentSnapshot document) {
-          //   print(FirebaseFile.fromDocument(document).uploader);
-          //   files.add(FirebaseFile.fromDocument(document));
-          // });
+          //Displaying the files in list view
           return ListView(
             children: snapshot.data!.docs.map((document) {
-              // String uid = document['uploader'];
-              // String displayName = document['uploaderDisplayName'];
               return Column(
                 children: [
                   Container(
@@ -309,7 +152,6 @@ class _FileUploadPageState extends State<FileUploadPage> {
                           '${timeago.format(document['timestamp'].toDate())}'),
                       leading: CircleAvatar(
                         backgroundColor: Colors.grey,
-                        // child: getBackgroundText(uid),
                         backgroundImage: getPhotoUrl(document['fileName']),
                       ),
                       title: Text(
@@ -318,7 +160,6 @@ class _FileUploadPageState extends State<FileUploadPage> {
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline),
                       ),
-                      // subtitle: Text(displayName),
                       onTap: () {
                         InternetConnectionStatusClass
                             .getInternetConnectionStatus();
@@ -340,38 +181,8 @@ class _FileUploadPageState extends State<FileUploadPage> {
           );
         });
   }
-  // Future getFiles() async {
-  //   QuerySnapshot qn =
-  //       await _files.where('room', isEqualTo: widget.roomDetails).get();
-  //   return qn.docs;
-  // }
 
-  // buildFile() {
-  //   return FutureBuilder(
-  //     future: getFiles(),
-  //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  //       if (!snapshot.hasData) {
-  //         print('no data');
-  //         return Center(
-  //           child: SizedBox(
-  //             height: 75.0,
-  //             width: 75.0,
-  //             child: CircularProgressIndicator(),
-  //           ),
-  //         );
-  //       }
-  //       List<FirebaseFile> files = [];
-  //       snapshot.data!.docs.map((DocumentSnapshot document) {
-  //         print(FirebaseFile.fromDocument(document).uploader);
-  //         files.add(FirebaseFile.fromDocument(document));
-  //       });
-  //       return ListView(
-  //         children: files,
-  //       );
-  //     },
-  //   );
-  // }
-
+  //Building file upload page UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -391,53 +202,19 @@ class _FileUploadPageState extends State<FileUploadPage> {
           ),
         ],
       ),
-      // body: FutureBuilder<List<FirebaseFile>?>(
-      //   future: futureFiles,
-      //   builder: (context, snapshot) {
-      //     switch (snapshot.connectionState) {
-      //       case ConnectionState.waiting:
-      //         return Center(
-      //           child: CircularProgressIndicator(),
-      //         );
-      //       default:
-      //         if (snapshot.hasError) {
-      //           Fluttertoast.showToast(
-      //               msg: "Some error occured",
-      //               toastLength: Toast.LENGTH_LONG,
-      //               gravity: ToastGravity.BOTTOM,
-      //               timeInSecForIosWeb: 1,
-      //               backgroundColor: Colors.black87,
-      //               textColor: Colors.white,
-      //               fontSize: 16.0);
-      //           return Text('Some error occurred');
-      //         } else {
-      //           final files = snapshot.data!;
-      //           return Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               Expanded(
-      //                 child: ListView.builder(itemBuilder: (context, index) {
-      //                   final file = files[index];
-      //                   return buildFile(context, file);
-      //                 }),
-      //               ),
-      //             ],
-      //           );
-      //         }
-      //     }
-      //   },
-      // ),
       body: Column(
         children: <Widget>[
+          //Calling buildfile to display list view of files
           Expanded(
             child: buildFile(),
-            // child: Text(_files.snapshots().toString()),
           ),
         ],
       ),
+      //Button to add new files
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           InternetConnectionStatusClass.getInternetConnectionStatus();
+          //Selecting file and uploading to firebase
           try {
             final result =
                 await FilePicker.platform.pickFiles(allowMultiple: false);
@@ -463,11 +240,11 @@ class _FileUploadPageState extends State<FileUploadPage> {
             final snapshot = await task!.whenComplete(() {
               circularProgressIndicator;
             });
+            //Storing the details of the file in firebase firestore
             final urlDownload = await snapshot.ref.getDownloadURL();
             _files.doc(widget.roomDetails).collection('roomFiles').add({
               'fileUrl': urlDownload,
               'uploader': currentUser.uid,
-              // 'uploaderDisplayName': _auth.currentUser!.displayName,
               'timestamp': DateTime.now(),
               'filePath': 'files/${currentUser.uid}/$fileName',
               'fileName': fileName,

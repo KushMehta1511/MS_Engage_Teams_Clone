@@ -15,6 +15,7 @@ import 'package:ms_teams_clone_engage/authentication/login_page.dart';
 import 'package:ms_teams_clone_engage/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+//Profile Page Stateful Widget
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -42,10 +43,12 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    //Getting the details of the user logged in
     getCurrentUser();
     //print(loggedInUser.uid);
   }
 
+  //Function to get user details
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser;
@@ -58,6 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  //Function to get user display name
   void getDisplayName() async {
     DocumentSnapshot doc = await _usersRef.doc(loggedInUser.uid).get();
     if (!doc.exists) {
@@ -66,7 +70,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _usersRef.where('email', isEqualTo: loggedInUser.email).get().then((value) {
       value.docs.forEach((element) {
         setState(() {
-          // print(element['displayName']);
           displayNameController.text = element['displayName'];
           editDisplayName = element['displayName'];
           userDisplayName = element['displayName'];
@@ -76,6 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  //Function to get the text from the display name for the display picture placeholder
   getBackgroundText() {
     if (isFileNull) {
       if (photoUrl == "") {
@@ -109,6 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  //Function to get the photoUrl from the user details
   getPhotoUrl() {
     if (isFileNull) {
       if (photoUrl == "") {
@@ -125,6 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  //Function to check whether user is allowed to edit profile or not
   editProfile() {
     InternetConnectionStatusClass.getInternetConnectionStatus();
     setState(() {
@@ -134,6 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  //Function to update profile
   updateProfile() async {
     InternetConnectionStatusClass.getInternetConnectionStatus();
     setState(() {
@@ -200,6 +207,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  //Function to choose image from gallery and uploading to firebase
   handleChooseFromGallery() async {
     InternetConnectionStatusClass.getInternetConnectionStatus();
     try {
@@ -239,6 +247,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  //Generating random colors for display image placeholder background image
   Color getBackgroundColor() {
     List<Color> colors = [];
     colors.add(Colors.blue);
@@ -252,12 +261,14 @@ class _ProfilePageState extends State<ProfilePage> {
     return colors[nextInd];
   }
 
+  //Builing Profile Page UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         actions: <Widget>[
+          //Routing to Dashboard
           IconButton(
             onPressed: () {
               InternetConnectionStatusClass.getInternetConnectionStatus();
@@ -266,6 +277,7 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             icon: Icon(Icons.meeting_room_outlined),
           ),
+          //Routing to Calendar
           IconButton(
             onPressed: () {
               InternetConnectionStatusClass.getInternetConnectionStatus();
@@ -274,6 +286,7 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             icon: Icon(Icons.calendar_today),
           ),
+          //Signing out
           IconButton(
             onPressed: () {
               InternetConnectionStatusClass.getInternetConnectionStatus();
@@ -295,6 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  //Displaying display name and display picture
                   Stack(
                     children: <Widget>[
                       CircleAvatar(
@@ -398,6 +412,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(
                     height: 200,
                   ),
+                  //Room details text form field
                   Form(
                     key: _roomFormKey,
                     child: TextFormField(
@@ -437,6 +452,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(
                     height: 10,
                   ),
+                  //Button to enter room
                   Padding(
                     padding: EdgeInsets.only(top: 20.0),
                     child: ButtonTheme(
