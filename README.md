@@ -67,7 +67,8 @@ To share the meeting link with your friends, click on the “Invite Someone” i
 
 **Dark Mode:** The app recognises the system’s theme and changes accordingly. If the default theme of the system is dark then the app opens up in dark mode otherwise in light mode. The images shown above are of the light mode. The images below are for the dark mode.  
   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188143-58cca600-e250-11eb-8673-19e84d45b522.jpg" alt="1624700929333" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188172-73068400-e250-11eb-8ed1-a81447f3434d.jpg" alt="1625990154563" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188188-831e6380-e250-11eb-9371-cbb37e036d6e.jpg" alt="1625990154557" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188206-95000680-e250-11eb-9084-c534164ecd26.jpg" alt="1625990154550" width="200"/>  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188143-58cca600-e250-11eb-8673-19e84d45b522.jpg" alt="1624700929333" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188172-73068400-e250-11eb-8ed1-a81447f3434d.jpg" alt="1625990154563" width="200"/>  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188188-831e6380-e250-11eb-9371-cbb37e036d6e.jpg" alt="1625990154557" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/65716045/125188206-95000680-e250-11eb-9084-c534164ecd26.jpg" alt="1625990154550" width="200"/>  
 
 ## APK of the app
 The latest release of the application is published [here](https://github.com/KushMehta1511/MS_Engage_Teams_Clone/releases/tag/v8.7.21).
